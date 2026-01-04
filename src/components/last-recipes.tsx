@@ -29,7 +29,7 @@ export function LastRecipes() {
         </EmptyHeader>
         <EmptyContent>
           <Button asChild>
-            <Link to="/">Create new recipe</Link>
+            <Link to="/recipes/new">Create new recipe</Link>
           </Button>
         </EmptyContent>
       </Empty>
