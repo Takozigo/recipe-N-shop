@@ -7,6 +7,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  unique,
   uuid,
 } from 'drizzle-orm/pg-core'
 
@@ -48,9 +49,9 @@ export const recipeSteps = pgTable(
   {
     id: uuid('id').defaultRandom().primaryKey(),
 
-    sectionId: uuid('section_id')
-      .notNull()
-      .references(() => recipeSections.id, { onDelete: 'cascade' }),
+    sectionId: uuid('section_id').references(() => recipeSections.id, {
+      onDelete: 'set null',
+    }),
 
     position: integer('position').notNull(),
     title: text('title'),
@@ -60,12 +61,15 @@ export const recipeSteps = pgTable(
   (table) => [index('recipe_steps_section_idx').on(table.sectionId)],
 )
 
-export const ingredients = pgTable('ingredients', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  name: text('name').notNull().unique(),
-  nom: text('nom').notNull().unique(),
-  namae: text('namae').notNull().unique(),
-})
+export const ingredients = pgTable(
+  'ingredients',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    value: text('value').notNull(),
+    lang: text('lang').notNull(),
+  },
+  (table) => [unique().on(table.value, table.lang)],
+)
 
 export const recipeIngredients = pgTable(
   'recipe_ingredients',
@@ -82,7 +86,7 @@ export const recipeIngredients = pgTable(
       onDelete: 'set null',
     }),
 
-    amount: numeric('amount', { precision: 10, scale: 2 }),
+    amount: numeric('amount', { precision: 10, scale: 2 }).notNull(),
     unit: text('unit'),
     note: text('note'),
   },
