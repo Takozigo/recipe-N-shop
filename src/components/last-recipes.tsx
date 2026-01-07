@@ -17,7 +17,7 @@ export function LastRecipes() {
 
   if (recipes.length === 0)
     return (
-      <Empty className="border rounded-sm p-2 space-y-0 md:p-2 w-fit">
+      <Empty className="w-fit space-y-0 rounded-sm border p-2 md:p-2">
         <EmptyHeader>
           <EmptyMedia variant="icon">
             <AnnoyedIcon />

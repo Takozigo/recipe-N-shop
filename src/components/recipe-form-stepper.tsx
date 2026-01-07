@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import {
-  BadgeCheckIcon,
   ChevronRightIcon,
   CookingPotIcon,
   ShoppingBasket,
@@ -8,7 +6,6 @@ import {
 } from 'lucide-react'
 import {
   Item,
-  ItemActions,
   ItemContent,
   ItemDescription,
   ItemMedia,
@@ -24,7 +21,7 @@ export function RecipeFormStepper({ step }: { step: RecipeFormStepperStep }) {
       <Item>
         <ItemMedia
           className={cn(
-            'self-center! p-3 rounded-full transition-colors duration-600',
+            'self-center! rounded-full p-3 transition-colors duration-600',
             step === 'recipe' && 'bg-primary',
           )}
         >
@@ -44,7 +41,7 @@ export function RecipeFormStepper({ step }: { step: RecipeFormStepperStep }) {
       <Item className="items-center">
         <ItemMedia
           className={cn(
-            'self-center! p-3 rounded-full transition-colors duration-600',
+            'self-center! rounded-full p-3 transition-colors duration-600',
             step === 'ingredients' && 'bg-primary',
           )}
         >
@@ -66,7 +63,7 @@ export function RecipeFormStepper({ step }: { step: RecipeFormStepperStep }) {
       <Item>
         <ItemMedia
           className={cn(
-            'self-center! p-3 rounded-full transition-colors duration-600',
+            'self-center! rounded-full p-3 transition-colors duration-600',
             step === 'steps' && 'bg-primary',
           )}
         >

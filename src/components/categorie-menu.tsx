@@ -1,9 +1,7 @@
 import { getRouteApi } from '@tanstack/react-router'
-import { AnnoyedIcon, Link } from 'lucide-react'
-import { Button } from './ui/button'
+import { AnnoyedIcon } from 'lucide-react'
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
@@ -17,7 +15,7 @@ export function CategoriesMenu() {
 
   if (categories.length === 0)
     return (
-      <Empty className="border rounded-sm p-2 space-y-0 md:p-2 w-40 h-40">
+      <Empty className="h-40 w-40 space-y-0 rounded-sm border p-2 md:p-2">
         <EmptyHeader>
           <EmptyMedia variant="icon">
             <AnnoyedIcon />

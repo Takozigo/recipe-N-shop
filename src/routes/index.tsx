@@ -1,21 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
-import { desc } from 'drizzle-orm'
 import { CategoriesMenu } from '@/components/categorie-menu'
 import { LastRecipes } from '@/components/last-recipes'
-import { db } from '@/db'
-import { recipes } from '@/db/schema'
 import { Text } from '@/components/text'
+import { getLatestRecipes } from '@/server/actions/recipes/get-latest'
+import { db } from '@/server/db'
 
 const getCategories = createServerFn({ method: 'GET' }).handler(async () => {
   const res = await db.query.categories.findMany()
-  return res
-})
-
-const getLatestRecipes = createServerFn({ method: 'GET' }).handler(async () => {
-  const res = await db.query.recipes.findMany({
-    orderBy: desc(recipes.createdAt),
-  })
   return res
 })
 

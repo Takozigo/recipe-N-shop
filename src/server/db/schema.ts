@@ -49,6 +49,10 @@ export const recipeSteps = pgTable(
   {
     id: uuid('id').defaultRandom().primaryKey(),
 
+    recipeId: uuid('recipe_id')
+      .notNull()
+      .references(() => recipes.id, { onDelete: 'cascade' }),
+
     sectionId: uuid('section_id').references(() => recipeSections.id, {
       onDelete: 'set null',
     }),
@@ -58,7 +62,10 @@ export const recipeSteps = pgTable(
     description: text('description').notNull(),
     imageUrl: text('image_url'),
   },
-  (table) => [index('recipe_steps_section_idx').on(table.sectionId)],
+  (table) => [
+    index('recipe_steps_recipe_idx').on(table.recipeId),
+    index('recipe_steps_section_idx').on(table.sectionId),
+  ],
 )
 
 export const ingredients = pgTable(
@@ -90,7 +97,10 @@ export const recipeIngredients = pgTable(
     unit: text('unit'),
     note: text('note'),
   },
-  (table) => [primaryKey({ columns: [table.recipeId, table.ingredientId] })],
+  (table) => [
+    primaryKey({ columns: [table.recipeId, table.ingredientId] }),
+    index('recipe_ingredients_recipe_idx').on(table.recipeId),
+  ],
 )
 
 export const categories = pgTable('categories', {
