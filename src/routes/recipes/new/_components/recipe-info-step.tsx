@@ -15,6 +15,12 @@ function RecipeInfoStep({ form }: RecipeInfoStepProps) {
     <CarouselItem>
       <FieldGroup>
         <TextField name="title" form={form} label="Recipe Title" />
+        <TextAreaField
+          name="shortDescription"
+          form={form}
+          label="Short description"
+          maxLength={150}
+        />
         <TextAreaField name="description" form={form} label="Description" />
         <FieldSeparator />
         <div className="flex items-center gap-4">

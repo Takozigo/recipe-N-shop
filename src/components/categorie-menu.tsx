@@ -15,7 +15,7 @@ export function CategoriesMenu() {
 
   if (categories.length === 0)
     return (
-      <Empty className="h-40 w-40 space-y-0 rounded-sm border p-2 md:p-2">
+      <Empty className="corner-notch h-40 w-40 space-y-0 rounded-sm border p-2 md:p-2">
         <EmptyHeader>
           <EmptyMedia variant="icon">
             <AnnoyedIcon />

@@ -49,6 +49,7 @@ function RecipeIngredientsStep({ form }: RecipeIngredientsStepProps) {
                           ingredientId: pendingIngredient.dataId,
                           ingredient: pendingIngredient.value,
                           amount: 0,
+                          unit: 'pcs',
                         })
                       setPendingIngredient(null)
                     }}

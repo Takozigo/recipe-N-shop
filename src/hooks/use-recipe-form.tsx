@@ -1,14 +1,12 @@
 import { useForm } from '@tanstack/react-form'
 import { useServerFn } from '@tanstack/react-start'
 import { toast } from 'sonner'
+import type { RecipeInput } from '@/lib/schemas/recipe'
 import { recipeSchema } from '@/lib/schemas/recipe'
 import { addRecipe } from '@/server/actions/recipes/add-recipe'
 
-const defaultRecipe: Recipe = {
+const defaultRecipe: RecipeInput = {
   title: '',
-  servings: 0,
-  prepTimeMinutes: 0,
-  cookTimeMinutes: 0,
   ingredients: [],
   steps: [],
 }

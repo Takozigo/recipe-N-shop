@@ -27,6 +27,10 @@ type FieldTextInputProps = {
   type?: 'text' | 'number'
 } & Omit<React.ComponentProps<'input'>, 'form' | 'name'>
 
+type FieldTextAreaInputProps = {
+  field: any
+} & Omit<React.ComponentProps<'textarea'>, 'form' | 'name'>
+
 export function TextField({
   form,
   name,
@@ -108,6 +112,27 @@ export function FieldTextInput({
             type === 'number' ? Number(e.target.value) : e.target.value,
           )
         }
+      />
+      {invalid && <FieldError errors={field.state.meta.errors} />}
+    </Field>
+  )
+}
+
+export function FieldTextAreaInput({
+  field,
+  placeholder,
+}: FieldTextAreaInputProps) {
+  const invalid = field.state.meta.isTouched && !field.state.meta.isValid
+
+  return (
+    <Field data-invalid={invalid}>
+      <Textarea
+        id={field.name}
+        name={field.name}
+        placeholder={placeholder}
+        value={field.state.value ?? ''}
+        onBlur={field.handleBlur}
+        onChange={(e) => field.handleChange(e.target.value)}
       />
       {invalid && <FieldError errors={field.state.meta.errors} />}
     </Field>

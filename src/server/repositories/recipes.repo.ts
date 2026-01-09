@@ -11,9 +11,9 @@ export async function insertRecipe(
     cookTimeMinutes,
   }: {
     title: string
-    servings: number
-    prepTimeMinutes: number
-    cookTimeMinutes: number
+    servings?: number
+    prepTimeMinutes?: number
+    cookTimeMinutes?: number
     description?: string
   },
 ) {

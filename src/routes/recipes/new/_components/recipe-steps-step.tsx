@@ -1,5 +1,5 @@
 import type { RecipeForm } from '@/hooks/use-recipe-form'
-import { FieldTextInput } from '@/components/text-field'
+import { FieldTextAreaInput, FieldTextInput } from '@/components/text-field'
 import { Button } from '@/components/ui/button'
 import { CarouselItem } from '@/components/ui/carousel'
 import { FieldGroup } from '@/components/ui/field'
@@ -50,13 +50,7 @@ const RecipeStepsStep = ({ form }: RecipeStepsStepProps) => {
                       </form.Field>
                     </div>
                     <form.Field key={i} name={`steps[${i}].description`}>
-                      {(subField) => (
-                        <FieldTextInput
-                          field={subField}
-                          placeholder="Step"
-                          autoComplete="off"
-                        />
-                      )}
+                      {(subField) => <FieldTextAreaInput field={subField} />}
                     </form.Field>
                   </div>
                 )

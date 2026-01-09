@@ -1,4 +1,4 @@
-import { relations } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import {
   index,
   integer,
@@ -15,6 +15,7 @@ export const recipes = pgTable('recipes', {
   id: uuid('id').defaultRandom().primaryKey(),
 
   title: text('title').notNull(),
+  shortDescription: text('short_description'),
   description: text('description'),
 
   servings: integer('servings'),
@@ -92,14 +93,17 @@ export const recipeIngredients = pgTable(
     sectionId: uuid('section_id').references(() => recipeSections.id, {
       onDelete: 'set null',
     }),
-
-    amount: numeric('amount', { precision: 10, scale: 2 }).notNull(),
     unit: text('unit'),
+    amount: numeric('amount', { precision: 10, scale: 2 }).notNull(),
     note: text('note'),
   },
   (table) => [
     primaryKey({ columns: [table.recipeId, table.ingredientId] }),
     index('recipe_ingredients_recipe_idx').on(table.recipeId),
+    sql`CHECK (
+      ${table.unit} IS NULL
+      OR ${table.unit} IN (Object.keys(UNITS)
+    )`,
   ],
 )
 
@@ -138,6 +142,7 @@ export const recipesRelations = relations(recipes, ({ many }) => ({
   sections: many(recipeSections),
   ingredients: many(recipeIngredients),
   categories: many(recipeCategories),
+  steps: many(recipeSteps),
 }))
 
 export const recipeSectionsRelations = relations(
@@ -146,3 +151,32 @@ export const recipeSectionsRelations = relations(
     steps: many(recipeSteps),
   }),
 )
+
+export const recipeIngredientsRelations = relations(
+  recipeIngredients,
+  ({ one }) => ({
+    recipe: one(recipes, {
+      fields: [recipeIngredients.recipeId],
+      references: [recipes.id],
+    }),
+    ingredient: one(ingredients, {
+      fields: [recipeIngredients.ingredientId],
+      references: [ingredients.id],
+    }),
+    section: one(recipeSections, {
+      fields: [recipeIngredients.sectionId],
+      references: [recipeSections.id],
+    }),
+  }),
+)
+
+export const recipeStepsRelations = relations(recipeSteps, ({ one }) => ({
+  recipe: one(recipes, {
+    fields: [recipeSteps.recipeId],
+    references: [recipes.id],
+  }),
+  section: one(recipeSections, {
+    fields: [recipeSteps.sectionId],
+    references: [recipeSections.id],
+  }),
+}))

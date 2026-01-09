@@ -1,8 +1,8 @@
 @import 'tailwindcss';
 
 @import 'tw-animate-css';
-
-@custom-variant dark (&:is(.dark *));
+@plugin '@toolwind/corner-shape';
+@custom-variant dark (&: is(.dark *));
 
 body {
   @apply m-0;
@@ -138,7 +138,15 @@ code {
 }
 
 @utility container {
-  @apply max-w-4xl;
+  @apply max-w-6xl;
   margin-inline: auto;
   padding: 1rem;
+}
+
+.glass-card {
+  @apply rounded-xl p-4 text-white;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
