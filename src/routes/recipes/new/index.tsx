@@ -52,7 +52,7 @@ function RouteComponent() {
   }, [api])
 
   return (
-    <div className="container space-y-2">
+    <div className="container space-y-2 pb-20">
       <Text variant="h1">Create a new recipe</Text>
       <Separator />
       <RecipeFormStepper step={STEPS[count]} />
@@ -66,7 +66,7 @@ function RouteComponent() {
       >
         <Card>
           <CardContent>
-            <Carousel setApi={setApi}>
+            <Carousel setApi={setApi} disableKeyNavigation>
               <CarouselContent>
                 <RecipeInfoStep form={form} />
                 <RecipeIngredientsStep form={form} />
@@ -74,29 +74,31 @@ function RouteComponent() {
               </CarouselContent>
             </Carousel>
           </CardContent>
-          <CardDescription className="m-auto space-x-4">
-            <Button
-              type="button"
-              disabled={!api?.canScrollPrev()}
-              onClick={() => {
-                setCount((c) => c - 1)
-                if (api?.canScrollPrev()) api.scrollPrev()
-              }}
-            >
-              Prev
-            </Button>
+          <CardDescription className="fixed inset-x-0 bottom-4 z-50 flex justify-center">
+            <div className="glass-card corner-squircle absolute bottom-0.5 space-x-4 rounded-2xl">
+              <Button
+                type="button"
+                disabled={!api?.canScrollPrev()}
+                onClick={() => {
+                  setCount((c) => c - 1)
+                  if (api?.canScrollPrev()) api.scrollPrev()
+                }}
+              >
+                Prev
+              </Button>
 
-            <Button
-              disabled={!api?.canScrollNext()}
-              type="button"
-              onClick={() => {
-                setCount((c) => c + 1)
-                if (api?.canScrollNext()) api.scrollNext()
-              }}
-            >
-              Next
-            </Button>
-            <Button type="submit">Create</Button>
+              <Button
+                disabled={!api?.canScrollNext()}
+                type="button"
+                onClick={() => {
+                  setCount((c) => c + 1)
+                  if (api?.canScrollNext()) api.scrollNext()
+                }}
+              >
+                Next
+              </Button>
+              <Button type="submit">Create</Button>
+            </div>
           </CardDescription>
         </Card>
       </form>

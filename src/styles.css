@@ -144,7 +144,7 @@ code {
 }
 
 .glass-card {
-  @apply rounded-xl p-4 text-white;
+  @apply p-4 text-white;
   background: rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);

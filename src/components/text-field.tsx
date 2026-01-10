@@ -1,5 +1,11 @@
 import { Field, FieldError, FieldLabel } from './ui/field'
 import { Input } from './ui/input'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  InputGroupTextarea,
+} from './ui/input-group'
 import { Textarea } from './ui/textarea'
 import type { RecipeForm } from '@/hooks/use-recipe-form'
 
@@ -69,20 +75,38 @@ export function TextAreaField({
   name,
   label,
   placeholder,
+  maxLength,
+  ...others
 }: TextAreaFieldProps) {
   return (
     <form.Field name={name}>
       {(field) => {
         const invalid = field.state.meta.isTouched && !field.state.meta.isValid
+
+        const value = field.state.value ?? ''
+
         return (
           <Field data-invalid={invalid}>
             <FieldLabel>{label}</FieldLabel>
-            <Textarea
-              placeholder={placeholder}
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => e.target.value}
-            />
+
+            <InputGroup>
+              <InputGroupTextarea
+                placeholder={placeholder}
+                value={value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                {...others}
+              />
+
+              {maxLength && (
+                <InputGroupAddon align="block-end">
+                  <InputGroupText className="tabular-nums">
+                    {(value as string).length}/{maxLength} characters
+                  </InputGroupText>
+                </InputGroupAddon>
+              )}
+            </InputGroup>
+
             {invalid && <FieldError errors={field.state.meta.errors} />}
           </Field>
         )

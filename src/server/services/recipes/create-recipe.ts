@@ -1,5 +1,6 @@
 import type { RecipeInput } from '@/lib/schemas/recipe'
 import { db } from '@/server/db'
+import { insertCategories } from '@/server/repositories/categories.repo'
 import { insertIngredients } from '@/server/repositories/ingredients.repo'
 import { insertRecipe } from '@/server/repositories/recipes.repo'
 import { inserSection } from '@/server/repositories/sections.repo'
@@ -18,6 +19,7 @@ export async function createRecipe(
     cookTimeMinutes,
     ingredients,
     steps,
+    categories,
   } = data
 
   try {
@@ -38,6 +40,8 @@ export async function createRecipe(
           ].filter((e): e is string => typeof e === 'string'),
         ),
       )
+
+      await insertCategories(tx, insertedId, categories)
 
       await inserSection(tx, insertedId, sectionTitles)
 

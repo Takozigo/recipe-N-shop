@@ -9,6 +9,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from './ui/empty'
+import { RecipeCard } from './recipe-card'
 
 export function LastRecipes() {
   const recipes = getRouteApi('/').useLoaderData({
@@ -35,5 +36,11 @@ export function LastRecipes() {
       </Empty>
     )
 
-  return <p>{JSON.stringify(recipes)}</p>
+  return (
+    <div className="flex gap-2">
+      {recipes.map((r) => (
+        <RecipeCard title={r.title} key={r.id} id={r.id} />
+      ))}
+    </div>
+  )
 }

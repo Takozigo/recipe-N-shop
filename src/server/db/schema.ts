@@ -13,6 +13,7 @@ import {
 
 export const recipes = pgTable('recipes', {
   id: uuid('id').defaultRandom().primaryKey(),
+  slug: text('slug').notNull(),
 
   title: text('title').notNull(),
   shortDescription: text('short_description'),

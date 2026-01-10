@@ -7,7 +7,6 @@ export const addRecipe = createServerFn({ method: 'POST' })
   .inputValidator(recipeSchema)
   .handler(async ({ data }) => {
     const res = await createRecipe(data)
-    console.log({ res })
 
     if (res?.error) {
       return res

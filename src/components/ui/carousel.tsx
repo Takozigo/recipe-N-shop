@@ -14,6 +14,7 @@ type CarouselProps = {
   opts?: CarouselOptions
   plugins?: CarouselPlugin
   orientation?: 'horizontal' | 'vertical'
+  disableKeyNavigation?: boolean
   setApi?: (api: CarouselApi) => void
 }
 
@@ -45,6 +46,7 @@ function Carousel({
   plugins,
   className,
   children,
+  disableKeyNavigation,
   ...props
 }: React.ComponentProps<'div'> & CarouselProps) {
   const [carouselRef, api] = useEmblaCarousel(
@@ -115,7 +117,8 @@ function Carousel({
       }}
     >
       <div
-        onKeyDownCapture={handleKeyDown}
+        onKeyDownCapture={disableKeyNavigation ? undefined : handleKeyDown}
+
         className={cn('relative', className)}
         role="region"
         aria-roledescription="carousel"

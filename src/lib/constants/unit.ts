@@ -108,3 +108,18 @@ export const UNITS_BY_TYPE = {
   approx: ['pinch', 'dash'],
   special: ['toTaste'],
 }
+
+export const UNIT_GROUPS = Object.entries(UNITS_BY_TYPE).map(
+  ([type, unitKeys]) => ({
+    type: type as UnitType,
+    units: unitKeys.map((key) => UNITS[key as UnitKey]),
+  }),
+)
+
+export const UNIT_TYPE_LABELS: Record<UnitType, { fr: string; en: string }> = {
+  weight: { fr: 'Poids', en: 'Weight' },
+  volume: { fr: 'Volume', en: 'Volume' },
+  count: { fr: 'Quantité', en: 'Count' },
+  approx: { fr: 'Approx.', en: 'Approx.' },
+  special: { fr: 'Spécial', en: 'Special' },
+}

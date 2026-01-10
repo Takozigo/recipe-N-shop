@@ -9,6 +9,7 @@ const defaultRecipe: RecipeInput = {
   title: '',
   ingredients: [],
   steps: [],
+  categories: [],
 }
 
 export function useRecipeForm() {

@@ -2,6 +2,7 @@ import { getRouteApi } from '@tanstack/react-router'
 import { TrashIcon } from 'lucide-react'
 import { useState } from 'react'
 import type { RecipeForm } from '@/hooks/use-recipe-form'
+import type { UnitKey } from '@/lib/constants/unit'
 import { FieldTextInput } from '@/components/text-field'
 import { Button } from '@/components/ui/button'
 import { CarouselItem } from '@/components/ui/carousel'
@@ -16,6 +17,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { UNIT_GROUPS, UNIT_TYPE_LABELS } from '@/lib/constants/unit'
 
 type RecipeIngredientsStepProps = {
   form: RecipeForm
@@ -99,14 +110,37 @@ function RecipeIngredientsStep({ form }: RecipeIngredientsStepProps) {
                       <form.Field name={`ingredients[${i}].unit`}>
                         {(subField) => (
                           <TableCell>
-                            <FieldTextInput
-                              field={subField}
-                              placeholder="Unit (optional)"
-                              autoComplete="off"
-                            />
+                            <Select
+                              value={subField.state.value}
+                              onValueChange={(value) =>
+                                subField.handleChange(value as UnitKey)
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Unit" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {UNIT_GROUPS.map((group) => (
+                                  <SelectGroup key={group.type}>
+                                    <SelectLabel>
+                                      {UNIT_TYPE_LABELS[group.type].en}
+                                    </SelectLabel>
+                                    {group.units.map((unit) => (
+                                      <SelectItem
+                                        key={unit.key}
+                                        value={unit.key}
+                                      >
+                                        {unit.label.fr}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectGroup>
+                                ))}
+                              </SelectContent>
+                            </Select>
                           </TableCell>
                         )}
                       </form.Field>
+
                       <form.Field name={`ingredients[${i}].section`}>
                         {(subField) => (
                           <TableCell>

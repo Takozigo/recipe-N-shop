@@ -34,6 +34,15 @@ export const recipeSchema = z.object({
       }),
     )
     .nonempty(),
+  categories: z
+    .array(
+      z.object({
+        id: z.string().optional(),
+        name: z.string(),
+        slug: z.string().optional(),
+      }),
+    )
+    .nonempty(),
 })
 
 export type RecipeInput = z.infer<typeof recipeSchema>
