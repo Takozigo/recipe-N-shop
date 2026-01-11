@@ -7,7 +7,7 @@ import {
   recipeIngredients,
 } from '@/server/db/schema'
 
-export async function getIngredients() {
+export async function getAllIngredients() {
   return await db.query.ingredients.findMany({
     orderBy: asc(ingredientsSchema.value),
   })

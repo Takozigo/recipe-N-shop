@@ -7,7 +7,7 @@ import { getFullRecipesFn } from '@/server/actions/recipes/get-full-recipe'
 
 export const Route = createFileRoute('/recipes/$id/')({
   component: RouteComponent,
-  loader: async ({ params }) => getFullRecipesFn({ data: params }),
+  loader: async ({ params }) => await getFullRecipesFn({ data: params }),
 })
 
 function RouteComponent() {

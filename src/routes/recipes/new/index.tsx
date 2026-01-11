@@ -11,13 +11,14 @@ import { Card, CardContent, CardDescription } from '@/components/ui/card'
 import { Carousel, CarouselContent } from '@/components/ui/carousel'
 import { Separator } from '@/components/ui/separator'
 import { useRecipeForm } from '@/hooks/use-recipe-form'
+import { getAllIngredientsFn } from '@/server/actions/ingredients/get-all-ingredients'
 import { getCategoriesFn } from '@/server/actions/categories/get-categories'
 
 export const Route = createFileRoute('/recipes/new/')({
   component: RouteComponent,
   loader: async () => ({
     categories: await getCategoriesFn(),
-    ingredients: await getIngredientsFn(),
+    ingredients: await getAllIngredientsFn(),
   }),
 })
 
@@ -89,7 +90,4 @@ function RouteComponent() {
       </form>
     </div>
   )
-}
-function getIngredientsFn() {
-  throw new Error('Function not implemented.')
 }

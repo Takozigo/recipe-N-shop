@@ -2,8 +2,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { CategoriesMenu } from '@/components/categorie-menu'
 import { LastRecipes } from '@/components/last-recipes'
 import { Text } from '@/components/text'
-import { getLatestRecipesFn } from '@/server/actions/recipes/get-latest'
 import { getCategoriesFn } from '@/server/actions/categories/get-categories'
+import { getLatestRecipesFn } from '@/server/actions/recipes/get-latest'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
