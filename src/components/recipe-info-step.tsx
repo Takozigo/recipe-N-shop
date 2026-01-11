@@ -48,7 +48,12 @@ function RecipeInfoStep({ form }: RecipeInfoStepProps) {
             </>
           )}
         </form.Field>
-        <TextField name="title" form={form} label="Recipe Title" />
+        <TextField
+          name="title"
+          form={form}
+          label="Recipe Title"
+          maxLength={50}
+        />
         <TextAreaField
           name="shortDescription"
           form={form}
@@ -75,14 +80,14 @@ function RecipeInfoStep({ form }: RecipeInfoStepProps) {
             name="prepTimeMinutes"
             form={form}
             label="Prep time (in minutes)"
-            min={1}
+            min={0}
           />
           <TextField
             type="number"
             name="cookTimeMinutes"
             form={form}
             label="Cook time (in minutes)"
-            min={1}
+            min={0}
           />
         </div>
       </FieldGroup>

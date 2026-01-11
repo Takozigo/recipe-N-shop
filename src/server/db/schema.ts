@@ -31,20 +31,20 @@ export const recipes = pgTable('recipes', {
     .notNull(),
 })
 
-export const recipeSections = pgTable(
-  'recipe_sections',
-  {
-    id: uuid('id').defaultRandom().primaryKey(),
+// export const recipeSections = pgTable(
+//   'recipe_sections',
+//   {
+//     id: uuid('id').defaultRandom().primaryKey(),
 
-    recipeId: uuid('recipe_id')
-      .notNull()
-      .references(() => recipes.id, { onDelete: 'cascade' }),
+//     recipeId: uuid('recipe_id')
+//       .notNull()
+//       .references(() => recipes.id, { onDelete: 'cascade' }),
 
-    title: text('title'),
-    position: integer('position').notNull(),
-  },
-  (table) => [index('recipe_sections_recipe_idx').on(table.recipeId)],
-)
+//     title: text('title'),
+//     position: integer('position').notNull(),
+//   },
+//   (table) => [index('recipe_sections_recipe_idx').on(table.recipeId)],
+// )
 
 export const recipeSteps = pgTable(
   'recipe_steps',
@@ -55,9 +55,7 @@ export const recipeSteps = pgTable(
       .notNull()
       .references(() => recipes.id, { onDelete: 'cascade' }),
 
-    sectionId: uuid('section_id').references(() => recipeSections.id, {
-      onDelete: 'set null',
-    }),
+    section: text('section'),
 
     position: integer('position').notNull(),
     title: text('title'),
@@ -66,7 +64,7 @@ export const recipeSteps = pgTable(
   },
   (table) => [
     index('recipe_steps_recipe_idx').on(table.recipeId),
-    index('recipe_steps_section_idx').on(table.sectionId),
+    // index('recipe_steps_section_idx').on(table.sectionId),
   ],
 )
 
@@ -91,9 +89,8 @@ export const recipeIngredients = pgTable(
       .notNull()
       .references(() => ingredients.id, { onDelete: 'restrict' }),
 
-    sectionId: uuid('section_id').references(() => recipeSections.id, {
-      onDelete: 'set null',
-    }),
+    section: text('section'),
+
     unit: text('unit'),
     amount: numeric('amount', { precision: 10, scale: 2 }).notNull(),
     note: text('note'),
@@ -140,18 +137,10 @@ export const recipeCategories = pgTable(
 // })
 
 export const recipesRelations = relations(recipes, ({ many }) => ({
-  sections: many(recipeSections),
   ingredients: many(recipeIngredients),
   categories: many(recipeCategories),
   steps: many(recipeSteps),
 }))
-
-export const recipeSectionsRelations = relations(
-  recipeSections,
-  ({ many }) => ({
-    steps: many(recipeSteps),
-  }),
-)
 
 export const recipeIngredientsRelations = relations(
   recipeIngredients,
@@ -164,10 +153,6 @@ export const recipeIngredientsRelations = relations(
       fields: [recipeIngredients.ingredientId],
       references: [ingredients.id],
     }),
-    section: one(recipeSections, {
-      fields: [recipeIngredients.sectionId],
-      references: [recipeSections.id],
-    }),
   }),
 )
 
@@ -175,9 +160,5 @@ export const recipeStepsRelations = relations(recipeSteps, ({ one }) => ({
   recipe: one(recipes, {
     fields: [recipeSteps.recipeId],
     references: [recipes.id],
-  }),
-  section: one(recipeSections, {
-    fields: [recipeSteps.sectionId],
-    references: [recipeSections.id],
   }),
 }))

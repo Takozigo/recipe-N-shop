@@ -5,8 +5,8 @@ export const recipeSchema = z.object({
   title: z
     .string()
     .min(5, 'Recipe title must be at least 5 characters.')
-    .max(32, 'Recipe title must be at most 32 characters.'),
-  shortDescription: z.string().max(100).optional(),
+    .max(50, 'Recipe title must be at most 50 characters.'),
+  shortDescription: z.string().max(150).optional(),
   description: z.string().max(500).optional(),
   servings: z.number().min(1).optional(),
   prepTimeMinutes: z.number().min(1).optional(),

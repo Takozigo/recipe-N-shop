@@ -4,14 +4,8 @@ export type Step = {
   description: string
   position: number
   imageUrl: string | null
-  sectionId: string | null
   recipeId: string
-  section: {
-    id: string
-    title: string | null
-    position: number
-    recipeId: string
-  } | null
+  section: string | null
 }
 
 export type StepItem = {
@@ -25,7 +19,6 @@ export type StepItem = {
 export type StepBlock =
   | {
       type: 'section'
-      id: string
       title: string | null
       steps: Array<StepItem>
     }
@@ -47,21 +40,20 @@ export function formatSteps(steps: Array<Step>): Array<StepBlock> {
       imageUrl: step.imageUrl,
     }
 
-    if (!step.sectionId) {
+    if (!step.section) {
       unsectioned.push(item)
       continue
     }
 
-    if (!sections.has(step.sectionId)) {
-      sections.set(step.sectionId, {
+    if (!sections.has(step.section)) {
+      sections.set(step.section, {
         type: 'section',
-        id: step.sectionId,
-        title: step.section?.title ?? null,
+        title: step.section,
         steps: [],
       })
     }
 
-    sections.get(step.sectionId)!.steps.push(item)
+    sections.get(step.section)!.steps.push(item)
   }
 
   // Sort steps inside sections

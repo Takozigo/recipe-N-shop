@@ -1,7 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/react-start'
 import { useEffect, useState } from 'react'
-import { asc } from 'drizzle-orm'
 import RecipeInfoStep from '../../../components/recipe-info-step'
 import RecipeIngredientsStep from '../../../components/recipe-ingredients-step'
 import RecipeStepsStep from '../../../components/recipe-steps-step'
@@ -13,26 +11,13 @@ import { Card, CardContent, CardDescription } from '@/components/ui/card'
 import { Carousel, CarouselContent } from '@/components/ui/carousel'
 import { Separator } from '@/components/ui/separator'
 import { useRecipeForm } from '@/hooks/use-recipe-form'
-import { db } from '@/server/db'
-import { ingredients } from '@/server/db/schema'
-
-const getIngredients = createServerFn({ method: 'GET' }).handler(async () => {
-  const res = await db.query.ingredients.findMany({
-    orderBy: asc(ingredients.value),
-  })
-  return res
-})
-
-const getCategories = createServerFn({ method: 'GET' }).handler(async () => {
-  const res = await db.query.categories.findMany()
-  return res
-})
+import { getCategoriesFn } from '@/server/actions/categories/get-categories'
 
 export const Route = createFileRoute('/recipes/new/')({
   component: RouteComponent,
   loader: async () => ({
-    categories: await getCategories(),
-    ingredients: await getIngredients(),
+    categories: await getCategoriesFn(),
+    ingredients: await getIngredientsFn(),
   }),
 })
 
@@ -104,4 +89,7 @@ function RouteComponent() {
       </form>
     </div>
   )
+}
+function getIngredientsFn() {
+  throw new Error('Function not implemented.')
 }

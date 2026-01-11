@@ -1,21 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/react-start'
 import { CategoriesMenu } from '@/components/categorie-menu'
 import { LastRecipes } from '@/components/last-recipes'
 import { Text } from '@/components/text'
-import { getLatestRecipes } from '@/server/actions/recipes/get-latest'
-import { db } from '@/server/db'
-
-const getCategories = createServerFn({ method: 'GET' }).handler(async () => {
-  const res = await db.query.categories.findMany()
-  return res
-})
+import { getLatestRecipesFn } from '@/server/actions/recipes/get-latest'
+import { getCategoriesFn } from '@/server/actions/categories/get-categories'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
   loader: async () => ({
-    categories: await getCategories(),
-    recipes: await getLatestRecipes(),
+    categories: await getCategoriesFn(),
+    recipes: await getLatestRecipesFn(),
   }),
 })
 

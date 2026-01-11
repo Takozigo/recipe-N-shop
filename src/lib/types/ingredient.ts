@@ -1,16 +1,10 @@
 export type ingredient = {
   note: string | null
   recipeId: string
-  sectionId: string | null
+  section: string | null
   ingredientId: string
   unit: string | null
   amount: string
-  section: {
-    title: string | null
-    id: string
-    recipeId: string
-    position: number
-  } | null
   ingredient: {
     value: string
     id: string
@@ -25,9 +19,7 @@ export type IngredientBlock =
     }
   | {
       type: 'section'
-      id: string
       title: string | null
-      position: number
       items: Array<ingredient>
     }
 
@@ -38,22 +30,20 @@ export function formatIngredientsBySection(
   const sections = new Map<string, IngredientBlock & { type: 'section' }>()
 
   for (const ing of ingredients) {
-    if (!ing.sectionId || !ing.section) {
+    if (!ing.section || !ing.section) {
       unsectioned.push(ing)
       continue
     }
 
-    if (!sections.has(ing.sectionId)) {
-      sections.set(ing.sectionId, {
+    if (!sections.has(ing.section)) {
+      sections.set(ing.section, {
         type: 'section',
-        id: ing.sectionId,
-        title: ing.section.title,
-        position: ing.section.position,
+        title: ing.section,
         items: [],
       })
     }
 
-    sections.get(ing.sectionId)!.items.push(ing)
+    sections.get(ing.section)!.items.push(ing)
   }
 
   // Sort ingredients inside each section if needed
@@ -63,15 +53,10 @@ export function formatIngredientsBySection(
     )
   }
 
-  // Sort sections by position
-  const orderedSections = Array.from(sections.values()).sort(
-    (a, b) => a.position - b.position,
-  )
-
   return [
     ...(unsectioned.length
       ? [{ type: 'ingredients', items: unsectioned } as const]
       : []),
-    ...orderedSections,
+    ...Array.from(sections.values()),
   ]
 }

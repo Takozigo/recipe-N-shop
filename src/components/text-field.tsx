@@ -43,6 +43,7 @@ export function TextField({
   label,
   type = 'text',
   placeholder,
+  ...others
 }: TextFieldProps) {
   return (
     <form.Field name={name}>
@@ -61,6 +62,7 @@ export function TextField({
                   type === 'number' ? Number(e.target.value) : e.target.value,
                 )
               }
+              {...others}
             />
             {invalid && <FieldError errors={field.state.meta.errors} />}
           </Field>
@@ -95,6 +97,7 @@ export function TextAreaField({
                 value={value}
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
+                maxLength={maxLength}
                 {...others}
               />
 

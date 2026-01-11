@@ -3,7 +3,6 @@ import { db } from '@/server/db'
 import { insertCategories } from '@/server/repositories/categories.repo'
 import { insertIngredients } from '@/server/repositories/ingredients.repo'
 import { insertRecipe } from '@/server/repositories/recipes.repo'
-import { inserSection } from '@/server/repositories/sections.repo'
 import { inserSteps } from '@/server/repositories/steps.repo'
 
 export async function createRecipe(
@@ -32,18 +31,7 @@ export async function createRecipe(
         cookTimeMinutes,
       })
 
-      const sectionTitles = Array.from(
-        new Set(
-          [
-            ...ingredients.map((i) => i.section),
-            ...steps.map((s) => s.section),
-          ].filter((e): e is string => typeof e === 'string'),
-        ),
-      )
-
       await insertCategories(tx, insertedId, categories)
-
-      await inserSection(tx, insertedId, sectionTitles)
 
       await insertIngredients(tx, insertedId, ingredients)
       await inserSteps(tx, insertedId, steps)

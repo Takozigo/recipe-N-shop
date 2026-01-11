@@ -1,8 +1,17 @@
+import { asc } from 'drizzle-orm'
+
+import { db } from '../db'
 import type { DbClient } from '../db'
 import {
   ingredients as ingredientsSchema,
   recipeIngredients,
 } from '@/server/db/schema'
+
+export async function getIngredients() {
+  return await db.query.ingredients.findMany({
+    orderBy: asc(ingredientsSchema.value),
+  })
+}
 
 export async function insertIngredients(
   tx: DbClient,

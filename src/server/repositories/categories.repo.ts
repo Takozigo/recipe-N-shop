@@ -1,6 +1,11 @@
 import { categories, recipeCategories } from '../db/schema'
+import { db } from '../db'
 import type { DbClient } from '../db'
 import { slugify } from '@/lib/utils'
+
+export async function getCategories() {
+  return await db.query.categories.findMany()
+}
 
 export async function insertCategories(
   tx: DbClient,

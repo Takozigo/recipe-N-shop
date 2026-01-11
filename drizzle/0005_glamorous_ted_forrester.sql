@@ -1,1 +1,0 @@
-ALTER TABLE "recipes" ADD COLUMN "short_description" text;

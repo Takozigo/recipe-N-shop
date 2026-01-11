@@ -1,47 +1,13 @@
-import { createFileRoute, notFound } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/react-start'
-import { eq } from 'drizzle-orm'
+import { createFileRoute } from '@tanstack/react-router'
 import type { StepItem } from '@/lib/types/step'
-import { db } from '@/server/db'
-import { recipes } from '@/server/db/schema'
 import { Text } from '@/components/text'
 import { RecipeHeroCard } from '@/components/recipe-hero-card'
 import IngredientsSidebar from '@/components/ingredients-sidebar'
-import { formatSteps } from '@/lib/types/step'
-import { formatIngredientsBySection } from '@/lib/types/ingredient'
-
-const getFullRecipes = createServerFn({ method: 'GET' })
-  .inputValidator((data: { id: string }) => data)
-  .handler(async ({ data }) => {
-    const recipe = await db.query.recipes.findFirst({
-      where: eq(recipes.id, data.id),
-      with: {
-        steps: {
-          orderBy: (steps, { asc }) => [asc(steps.position)],
-          with: {
-            section: true,
-          },
-        },
-        ingredients: {
-          with: {
-            ingredient: true,
-            section: true,
-          },
-        },
-      },
-    })
-    if (recipe == null) throw notFound()
-
-    return {
-      ...recipe,
-      steps: formatSteps(recipe.steps),
-      ingredients: formatIngredientsBySection(recipe.ingredients),
-    }
-  })
+import { getFullRecipesFn } from '@/server/actions/recipes/get-full-recipe'
 
 export const Route = createFileRoute('/recipes/$id/')({
   component: RouteComponent,
-  loader: async ({ params }) => getFullRecipes({ data: params }),
+  loader: async ({ params }) => getFullRecipesFn({ data: params }),
 })
 
 function RouteComponent() {
@@ -70,7 +36,7 @@ function RouteComponent() {
         }
 
         return (
-          <section key={block.id}>
+          <section key={block.title}>
             {block.title && <h3>{block.title}</h3>}
             <Text variant="list">{block.steps.map(renderStep)}</Text>
           </section>

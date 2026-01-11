@@ -1,13 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
-import { desc } from 'drizzle-orm'
-import { db } from '@/server/db'
-import { recipes } from '@/server/db/schema'
+import { getLatestRecipes } from '@/server/repositories/recipes.repo'
 
-export const getLatestRecipes = createServerFn({ method: 'GET' }).handler(
-  async () => {
-    const res = await db.query.recipes.findMany({
-      orderBy: desc(recipes.createdAt),
-    })
-    return res
-  },
+export const getLatestRecipesFn = createServerFn({ method: 'GET' }).handler(
+  getLatestRecipes,
 )

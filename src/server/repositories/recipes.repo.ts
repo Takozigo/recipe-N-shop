@@ -1,4 +1,6 @@
+import { desc, eq } from 'drizzle-orm'
 import { recipes } from '../db/schema'
+import { db } from '../db'
 import type { DbClient } from '../db'
 import { slugify } from '@/lib/utils'
 
@@ -34,4 +36,27 @@ export async function insertRecipe(
     .returning({ id: recipes.id })
 
   return row.id
+}
+
+export async function getLatestRecipes() {
+  const res = await db.query.recipes.findMany({
+    orderBy: desc(recipes.createdAt),
+  })
+  return res
+}
+
+export async function getFullRecipes(id: string) {
+  return await db.query.recipes.findFirst({
+    where: eq(recipes.id, id),
+    with: {
+      steps: {
+        orderBy: (steps, { asc }) => [asc(steps.position)],
+      },
+      ingredients: {
+        with: {
+          ingredient: true,
+        },
+      },
+    },
+  })
 }
