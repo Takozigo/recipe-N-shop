@@ -12,8 +12,9 @@ import {
 } from './ui/sheet'
 import { ButtonGroup } from './ui/button-group'
 import { Separator } from './ui/separator'
-import { Item, ItemActions, ItemContent, ItemTitle } from './ui/item'
-import type { IngredientBlock, ingredient } from '@/lib/types/ingredient'
+import { ScrollArea } from './ui/scroll-area'
+import { IngredientItem } from './ingredient-item'
+import type { IngredientBlock } from '@/lib/types/ingredient'
 
 type IngredientsSidebarProps = {
   ingredients: Array<IngredientBlock>
@@ -32,9 +33,9 @@ function IngredientsSidebar({ ingredients, portion }: IngredientsSidebarProps) {
       </SheetTrigger>
       <SheetContent
         side="left"
-        className="mt-14 border-none bg-transparent shadow-none md:mt-24"
+        className="mt-14 mb-4 h-[calc(100vh-3.5rem-1rem)] border-none bg-transparent shadow-none md:mt-24 md:h-[calc(100vh-6rem-1rem)]"
       >
-        <Card>
+        <Card className="flex h-full flex-col gap-0">
           <CardHeader>
             <SheetTitle>Ingredients list</SheetTitle>
             <Separator />
@@ -61,11 +62,30 @@ function IngredientsSidebar({ ingredients, portion }: IngredientsSidebarProps) {
             </CardDescription>
             <Separator />
           </CardHeader>
-          <CardContent>
-            {ingredients.map((block) => {
-              if (block.type === 'ingredients') {
+          <ScrollArea className="flex-1 overflow-scroll">
+            <CardContent>
+              {ingredients.map((block) => {
+                if (block.type === 'ingredients') {
+                  return (
+                    <div key="unsectioned">
+                      {block.items.map((i) => (
+                        <IngredientItem
+                          key={i.ingredientId}
+                          ingredient={i}
+                          serving={serving}
+                          portion={portion}
+                        />
+                      ))}
+                    </div>
+                  )
+                }
+
                 return (
-                  <div key="unsectioned">
+                  <div key={block.id}>
+                    {block.title && (
+                      <Text className="mb-2 font-semibold">{block.title}</Text>
+                    )}
+
                     {block.items.map((i) => (
                       <IngredientItem
                         key={i.ingredientId}
@@ -76,28 +96,10 @@ function IngredientsSidebar({ ingredients, portion }: IngredientsSidebarProps) {
                     ))}
                   </div>
                 )
-              }
-
-              return (
-                <div key={block.id}>
-                  {block.title && (
-                    <Text className="mb-2 font-semibold">{block.title}</Text>
-                  )}
-
-                  {block.items.map((i) => (
-                    <IngredientItem
-                      key={i.ingredientId}
-                      ingredient={i}
-                      serving={serving}
-                      portion={portion}
-                    />
-                  ))}
-                </div>
-              )
-            })}
-          </CardContent>
-
-          <SheetFooter>
+              })}
+            </CardContent>
+          </ScrollArea>
+          <SheetFooter className="pt-0">
             <SheetClose asChild>
               <Button variant="outline">Close</Button>
             </SheetClose>
@@ -109,38 +111,3 @@ function IngredientsSidebar({ ingredients, portion }: IngredientsSidebarProps) {
 }
 
 export default IngredientsSidebar
-
-function IngredientItem({
-  ingredient,
-  serving,
-  portion,
-}: {
-  ingredient: ingredient
-  serving: number
-  portion: number | null
-}) {
-  const getAmountByServing = (amount: number) => {
-    return amount * (serving / (portion ?? 1))
-  }
-  const amount =
-    ingredient.amount && ingredient.unit
-      ? getAmountByServing(Number(ingredient.amount))
-      : null
-
-  return (
-    <Item>
-      <ItemContent>
-        <ItemTitle>{ingredient.ingredient.value}</ItemTitle>
-      </ItemContent>
-      <ItemActions>
-        {amount ? (
-          <Text variant="muted">
-            {amount} {ingredient.unit}
-          </Text>
-        ) : (
-          <Text variant="muted">au goût</Text>
-        )}
-      </ItemActions>
-    </Item>
-  )
-}
