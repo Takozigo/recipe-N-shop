@@ -12,5 +12,11 @@
   "git": true,
   "version": 1,
   "framework": "react-cra",
-  "chosenAddOns": ["eslint", "nitro", "start", "drizzle", "shadcn"]
+  "chosenAddOns": [
+    "eslint",
+    "netlify",
+    "start",
+    "drizzle",
+    "shadcn"
+  ]
 }

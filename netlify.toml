@@ -1,9 +1,7 @@
 [build]
-  command = "npm run build"
-  publish = ".output/public"
-
-[functions]
-  directory = ".output/server"
-
-[[plugins]]
-  package = "@netlify/plugin-functions-install-core"
+  command = "vite build"
+  publish = "dist/client"
+  
+[dev]
+  command = "vite dev"
+  port = 3000
