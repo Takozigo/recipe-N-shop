@@ -19,7 +19,7 @@ code {
 }
 
 :root {
-  --background: oklch(0.97 0.01 81.76);
+  --background: oklch(97.131% 0.01012 81.701);
   --foreground: oklch(0.31 0.02 148.72);
   --card: oklch(0.97 0.01 81.76);
   --card-foreground: oklch(0.3 0.04 29.2);
@@ -185,10 +185,10 @@ code {
   padding: 1rem;
 }
 
-.glass-card {
-  @apply bg-white/20 p-4 backdrop-blur-md;
-  background: #ffffff2e;
-  backdrop-filter: blur(12px);
+@utility glass-card {
+  @apply p-4 text-white;
+  background: oklch(97.131% 0.01012 81.701 / 0.18);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
