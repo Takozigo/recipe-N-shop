@@ -45,9 +45,25 @@ export async function getLatestRecipes() {
   return res
 }
 
-export async function getFullRecipes(id: string) {
+export async function getFullRecipesById(id: string) {
   return await db.query.recipes.findFirst({
     where: eq(recipes.id, id),
+    with: {
+      steps: {
+        orderBy: (steps, { asc }) => [asc(steps.position)],
+      },
+      ingredients: {
+        with: {
+          ingredient: true,
+        },
+      },
+    },
+  })
+}
+
+export async function getFullRecipesBySlug(slug: string) {
+  return await db.query.recipes.findFirst({
+    where: eq(recipes.slug, slug),
     with: {
       steps: {
         orderBy: (steps, { asc }) => [asc(steps.position)],

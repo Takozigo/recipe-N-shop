@@ -4,12 +4,12 @@ import { Image } from '@unpic/react'
 type RecipeCardProps = {
   title: string
   imageUrl?: string | null
-  id: string
+  slug: string
 }
 
-export function RecipeCard({ title, imageUrl, id }: RecipeCardProps) {
+export function RecipeCard({ title, imageUrl, slug }: RecipeCardProps) {
   return (
-    <Link to={'/recipes/$id'} params={{ id }} className="h-64 w-64">
+    <Link to={'/recipes/$slug'} params={{ slug }} className="h-64 w-64">
       <div className="group relative overflow-hidden shadow-sm">
         {/* Image */}
         <Image

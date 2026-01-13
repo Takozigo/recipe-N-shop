@@ -39,7 +39,7 @@ export function LastRecipes() {
   return (
     <div className="flex gap-2">
       {recipes.map((r) => (
-        <RecipeCard title={r.title} key={r.id} id={r.id} />
+        <RecipeCard title={r.title} key={r.id} slug={r.slug} />
       ))}
     </div>
   )

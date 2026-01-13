@@ -2,10 +2,10 @@ export type Step = {
   id: string
   title: string | null
   description: string
-  position: number
-  imageUrl: string | null
   recipeId: string
   section: string | null
+  position: number
+  imageUrl: string | null
 }
 
 export type StepItem = {
