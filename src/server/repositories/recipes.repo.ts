@@ -33,9 +33,9 @@ export async function insertRecipe(
       cookTimeMinutes,
       shortDescription,
     })
-    .returning({ id: recipes.id })
+    .returning({ id: recipes.id, slug: recipes.slug })
 
-  return row.id
+  return { id: row.id, slug: row.slug }
 }
 
 export async function getLatestRecipes() {

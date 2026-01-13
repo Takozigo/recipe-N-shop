@@ -26,8 +26,10 @@ export function RecipeHeroCard({
         />
 
         <div className="glass-card absolute bottom-6 left-6 max-w-md rounded-xl wrap-break-word">
-          <h2 className="text-xl font-semibold">{title}</h2>
-          <p className="text-sm opacity-80">{shortDescription}</p>
+          <Text variant="h2" className="text-2xl">
+            {title}
+          </Text>
+          <Text>{shortDescription}</Text>
         </div>
 
         <div className="absolute right-6 bottom-6 flex items-center gap-3">

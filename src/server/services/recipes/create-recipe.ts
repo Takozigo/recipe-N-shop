@@ -8,7 +8,9 @@ import { inserSteps } from '@/server/repositories/steps.repo'
 export async function createRecipe(
   data: RecipeInput,
 ): Promise<
-  { error: true; message: string } | { error: false; id: string } | undefined
+  | { error: true; message: string }
+  | { error: false; id: string; slug: string }
+  | undefined
 > {
   const {
     title,
@@ -22,8 +24,8 @@ export async function createRecipe(
   } = data
 
   try {
-    const id = await db.transaction(async (tx) => {
-      const insertedId = await insertRecipe(tx, {
+    const newRecipes = await db.transaction(async (tx) => {
+      const { id, slug } = await insertRecipe(tx, {
         title,
         description,
         servings,
@@ -31,16 +33,17 @@ export async function createRecipe(
         cookTimeMinutes,
       })
 
-      await insertCategories(tx, insertedId, categories)
+      await insertCategories(tx, id, categories)
 
-      await insertIngredients(tx, insertedId, ingredients)
-      await inserSteps(tx, insertedId, steps)
+      await insertIngredients(tx, id, ingredients)
+      await inserSteps(tx, id, steps)
 
-      return insertedId
+      return { id, slug }
     })
     return {
       error: false,
-      id,
+      id: newRecipes.id,
+      slug: newRecipes.slug,
     }
   } catch (err) {
     return {

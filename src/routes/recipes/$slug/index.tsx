@@ -36,11 +36,17 @@ function RouteComponent() {
         <SidebarTrigger />
 
         <div className="p-4">
-          <Text variant="large">{recipe.description}</Text>
+          <Text variant="p" className="whitespace-pre-wrap italic">
+            {recipe.description}
+          </Text>
           {recipe.steps.map((block) => {
             if (block.type === 'steps') {
               return (
-                <Text variant="list" key="unsectioned">
+                <Text
+                  variant="list"
+                  key="unsectioned"
+                  className="whitespace-pre-wrap"
+                >
                   {block.steps.map(renderStep)}
                 </Text>
               )
@@ -61,10 +67,10 @@ function RouteComponent() {
 
 function renderStep(step: StepItem) {
   return (
-    <li key={step.id}>
+    <div key={step.id}>
       {step.title && <Text variant="h4">{step.title}</Text>}
-      <Text variant="list">{step.description}</Text>
+      <Text variant="p">{step.description}</Text>
       {step.imageUrl && <img src={step.imageUrl} />}
-    </li>
+    </div>
   )
 }

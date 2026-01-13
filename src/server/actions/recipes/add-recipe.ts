@@ -11,8 +11,8 @@ export const addRecipe = createServerFn({ method: 'POST' })
     if (res?.error) {
       return res
     }
-    if (res?.id) {
-      throw redirect({ to: '/recipes/$id', params: { id: res.id } })
+    if (res?.slug) {
+      throw redirect({ to: '/recipes/$slug', params: { slug: res.slug } })
     }
     return res
   })

@@ -1,6 +1,12 @@
 import { Text } from './text'
 
-import { Item, ItemActions, ItemContent, ItemTitle } from './ui/item'
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from './ui/item'
 import type { ingredient } from '@/lib/types/ingredient'
 
 export function IngredientItem({
@@ -15,6 +21,7 @@ export function IngredientItem({
   const getAmountByServing = (amount: number) => {
     return amount * (serving / (portion ?? 1))
   }
+
   const amount =
     ingredient.amount && ingredient.unit
       ? getAmountByServing(Number(ingredient.amount))
@@ -24,6 +31,7 @@ export function IngredientItem({
     <Item className="py-2">
       <ItemContent>
         <ItemTitle>{ingredient.ingredient.value}</ItemTitle>
+        <ItemDescription>{ingredient.note}</ItemDescription>
       </ItemContent>
       <ItemActions>
         {amount ? (
