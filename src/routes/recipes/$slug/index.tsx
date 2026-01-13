@@ -3,8 +3,9 @@ import type { StepItem } from '@/lib/types/step'
 import { getFullRecipesBySlugFn } from '@/server/actions/recipes/get-full-recipe'
 import { Text } from '@/components/text'
 import { RecipeHeroCard } from '@/components/recipe-hero-card'
-import IngredientsSidebar from '@/components/ingredients-sidebar'
 import { RecipeNotFound } from '@/components/not-found'
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import IngredientsSidebar from '@/components/ingredients-sidebar'
 
 export const Route = createFileRoute('/recipes/$slug/')({
   component: RouteComponent,
@@ -16,37 +17,45 @@ function RouteComponent() {
   const recipe = Route.useLoaderData()
 
   return (
-    <div className="container space-y-2">
-      <RecipeHeroCard
-        title={recipe.title}
-        shortDescription={recipe.shortDescription}
-        prepTimeMinutes={recipe.prepTimeMinutes}
-        cookTimeMinutes={recipe.cookTimeMinutes}
-      />
+    <SidebarProvider>
       <IngredientsSidebar
         ingredients={recipe.ingredients}
         portion={recipe.servings}
       />
-      <div className="p-4">
-        <Text variant="large">{recipe.description}</Text>
-        {recipe.steps.map((block) => {
-          if (block.type === 'steps') {
-            return (
-              <Text variant="list" key="unsectioned">
-                {block.steps.map(renderStep)}
-              </Text>
-            )
-          }
+      <div className="container space-y-2">
+        <RecipeHeroCard
+          title={recipe.title}
+          shortDescription={recipe.shortDescription}
+          prepTimeMinutes={recipe.prepTimeMinutes}
+          cookTimeMinutes={recipe.cookTimeMinutes}
+        />
+        {/* <IngredientsSidebar
+          ingredients={recipe.ingredients}
+          portion={recipe.servings}
+        /> */}
+        <SidebarTrigger />
 
-          return (
-            <section key={block.title}>
-              {block.title && <Text variant="h3">{block.title}</Text>}
-              <Text variant="list">{block.steps.map(renderStep)}</Text>
-            </section>
-          )
-        })}
+        <div className="p-4">
+          <Text variant="large">{recipe.description}</Text>
+          {recipe.steps.map((block) => {
+            if (block.type === 'steps') {
+              return (
+                <Text variant="list" key="unsectioned">
+                  {block.steps.map(renderStep)}
+                </Text>
+              )
+            }
+
+            return (
+              <section key={block.title}>
+                {block.title && <Text variant="h3">{block.title}</Text>}
+                <Text variant="list">{block.steps.map(renderStep)}</Text>
+              </section>
+            )
+          })}
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   )
 }
 
