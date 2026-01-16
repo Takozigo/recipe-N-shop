@@ -1,8 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
-import RecipeInfoStep from '../../../components/recipe-info-step'
-import RecipeIngredientsStep from '../../../components/recipe-ingredients-step'
-import RecipeStepsStep from '../../../components/recipe-steps-step'
+
 import type { CarouselApi } from '@/components/ui/carousel'
 import { RecipeFormStepper } from '@/components/recipe-form-stepper'
 import { Text } from '@/components/text'
@@ -13,8 +11,11 @@ import { Separator } from '@/components/ui/separator'
 import { useRecipeForm } from '@/hooks/use-recipe-form'
 import { getAllIngredientsFn } from '@/server/actions/ingredients/get-all-ingredients'
 import { getCategoriesFn } from '@/server/actions/categories/get-categories'
+import RecipeInfoStep from '@/components/recipe-info-step'
+import RecipeIngredientsStep from '@/components/recipe-ingredients-step'
+import RecipeStepsStep from '@/components/recipe-steps-step'
 
-export const Route = createFileRoute('/recipes/new/')({
+export const Route = createFileRoute('/_authenticated/admin/recipes/new/')({
   component: RouteComponent,
   loader: async () => ({
     categories: await getCategoriesFn(),

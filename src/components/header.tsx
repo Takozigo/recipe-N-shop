@@ -7,9 +7,6 @@ function header() {
         <Link to={'/'} className="text-primary">
           RECIPES
         </Link>
-        <Link to={'/recipes/new'} className="text-primary">
-          Create new
-        </Link>
       </div>
     </header>
   )

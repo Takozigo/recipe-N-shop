@@ -11,6 +11,8 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core'
 
+// export * from './auth-schema'
+
 export const recipes = pgTable('recipes', {
   id: uuid('id').defaultRandom().primaryKey(),
   slug: text('slug').notNull(),
@@ -160,5 +162,36 @@ export const recipeStepsRelations = relations(recipeSteps, ({ one }) => ({
   recipe: one(recipes, {
     fields: [recipeSteps.recipeId],
     references: [recipes.id],
+  }),
+}))
+
+export const user = pgTable('users', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  username: text('username').notNull(),
+  email: text('email').notNull(),
+  password: text('password').notNull(),
+  salt: text('salt').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+})
+
+export const session = pgTable('sessions', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id'),
+  expires: timestamp('created_at', { withTimezone: true }),
+})
+
+export const userRelations = relations(user, ({ many }) => ({
+  sessions: many(session),
+}))
+
+export const sessionRelations = relations(session, ({ one }) => ({
+  user: one(user, {
+    fields: [session.userId],
+    references: [user.id],
   }),
 }))

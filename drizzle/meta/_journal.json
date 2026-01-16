@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1768522825755,
+      "tag": "0000_wise_chronomancer",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1768528314944,
+      "tag": "0001_striped_piledriver",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1768536240134,
+      "tag": "0002_woozy_sleeper",
+      "breakpoints": true
+    }
+  ]
+}
