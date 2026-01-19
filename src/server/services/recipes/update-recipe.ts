@@ -22,6 +22,7 @@ export async function updateRecipe(
     ingredients,
     steps,
     categories,
+    shortDescription,
   } = data
 
   try {
@@ -33,7 +34,9 @@ export async function updateRecipe(
         servings,
         prepTimeMinutes,
         cookTimeMinutes,
+        shortDescription,
       })
+
       await updateRecipeCategories(tx, id, categories)
 
       await updateRecipeIngredients(tx, id, ingredients)

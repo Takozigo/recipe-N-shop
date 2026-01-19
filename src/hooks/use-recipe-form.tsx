@@ -13,19 +13,17 @@ const defaultRecipe: RecipeInput = {
 }
 
 export function useRecipeForm(recipe?: RecipeInput) {
-  const addRecipeFn = useServerFn(recipe ? editRecipe : addRecipe)
-  // const editRecipeFn = useServerFn(editRecipe)
+  const handleRecipeForm = useServerFn(recipe ? editRecipe : addRecipe)
 
   return useForm({
     defaultValues: { ...defaultRecipe, ...recipe } as RecipeInput,
     validators: { onSubmit: recipeBaseSchema },
     onSubmit: ({ value }) => {
-      console.log(JSON.stringify(value))
       toast.promise<
         | { error: true; message: string }
         | { error: false; id: string }
         | undefined
-      >(addRecipeFn({ data: value }), {
+      >(handleRecipeForm({ data: value }), {
         loading: 'Loading...',
         success: (e) => {
           return e?.error ? e.message : `Recipe has been created`

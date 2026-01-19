@@ -1,10 +1,8 @@
-import { Link, getRouteApi } from '@tanstack/react-router'
+import { getRouteApi } from '@tanstack/react-router'
 import { AnnoyedIcon } from 'lucide-react'
 import * as React from 'react'
-import { Button } from './ui/button'
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
@@ -27,22 +25,11 @@ export function LastRecipes() {
   })
 
   const [api, setApi] = React.useState<CarouselApi>()
-  const [current, setCurrent] = React.useState(0)
-  const [count, setCount] = React.useState(0)
-
-  const progress = (current * 100) / count
 
   React.useEffect(() => {
     if (!api) {
       return
     }
-
-    setCount(api.scrollSnapList().length)
-    setCurrent(api.selectedScrollSnap() + 1)
-
-    api.on('select', () => {
-      setCurrent(api.selectedScrollSnap() + 1)
-    })
   }, [api])
 
   if (recipes.length === 0)
@@ -57,11 +44,6 @@ export function LastRecipes() {
             No recipes seemed to have been found
           </EmptyDescription>
         </EmptyHeader>
-        <EmptyContent>
-          <Button asChild>
-            <Link to="/recipes/new">Create new recipe</Link>
-          </Button>
-        </EmptyContent>
       </Empty>
     )
 

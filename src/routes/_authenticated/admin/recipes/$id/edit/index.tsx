@@ -21,7 +21,6 @@ export const Route = createFileRoute('/_authenticated/admin/recipes/$id/edit/')(
 
 function RouteComponent() {
   const { recipe, categories, ingredients } = Route.useLoaderData()
-
   const form = useRecipeForm(recipe)
 
   return (
@@ -38,9 +37,7 @@ function RouteComponent() {
         <RecipeInfoStep form={form} categories={categories} />
         <RecipeIngredientsStep form={form} ingredients={ingredients} />
         <RecipeStepsStep form={form} />
-        <Button type="submit" className="">
-          Save
-        </Button>
+        <Button type="submit">Save</Button>
       </form>
     </div>
   )

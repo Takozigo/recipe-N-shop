@@ -9,8 +9,8 @@ export const recipeBaseSchema = z.object({
   description: z.string().optional(),
 
   servings: z.number().min(1).optional(),
-  prepTimeMinutes: z.number().min(1).optional(),
-  cookTimeMinutes: z.number().min(1).optional(),
+  prepTimeMinutes: z.number().min(0).optional(),
+  cookTimeMinutes: z.number().min(0).optional(),
 
   ingredients: z.array(
     z.object({

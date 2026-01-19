@@ -24,7 +24,6 @@ export const addRecipe = createServerFn({ method: 'POST' })
 export const editRecipe = createServerFn({ method: 'POST' })
   .inputValidator(updateRecipeSchema)
   .handler(async ({ data }) => {
-    console.log(JSON.stringify(data))
     const res = await updateRecipe(data)
 
     if (res?.error) {

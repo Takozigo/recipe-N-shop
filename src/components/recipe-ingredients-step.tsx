@@ -61,11 +61,6 @@ function RecipeIngredientsStep({
   } | null>(null)
 
   useEffect(() => {
-    console.log(
-      form
-        .getFieldValue('ingredients')
-        .map((e: { section?: string }) => e.section),
-    )
     setSections(
       form
         .getFieldValue('ingredients')

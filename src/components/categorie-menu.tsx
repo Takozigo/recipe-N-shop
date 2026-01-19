@@ -10,6 +10,14 @@ import {
 } from './ui/empty'
 import { Text } from './text'
 
+const AVAILABLE_CATEGORIES = new Set([
+  'apero',
+  'chicago',
+  'coreen',
+  'philippine',
+  'pizza',
+])
+
 export function CategoriesMenu() {
   const categories = getRouteApi('/').useLoaderData({
     select: (data) => data.categories,
@@ -40,7 +48,11 @@ export function CategoriesMenu() {
           className="hover:bg-accent corner-scoop hover:text-primary-foreground group flex h-32 w-32 flex-col justify-end rounded-2xl p-2 text-center"
         >
           <Image
-            src={`/category/${cat.slug}.png`}
+            src={
+              AVAILABLE_CATEGORIES.has(cat.slug)
+                ? `/category/${cat.slug}.png`
+                : '/category/placeholder.png'
+            }
             className="m-auto"
             layout="constrained"
             width={75}

@@ -20,6 +20,7 @@ export async function createRecipe(
     cookTimeMinutes,
     ingredients,
     steps,
+    shortDescription,
     categories,
   } = data
 
@@ -31,6 +32,7 @@ export async function createRecipe(
         servings,
         prepTimeMinutes,
         cookTimeMinutes,
+        shortDescription,
       })
 
       await insertCategories(tx, id, categories)

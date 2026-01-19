@@ -94,7 +94,6 @@ export async function updateRecipeIngredients(
     }))
 
   let newIngredients: Array<{ insertedId: string; value: string }> = []
-
   if (newIngredientsToInsert.length > 0) {
     newIngredients = await tx
       .insert(ingredientsSchema)

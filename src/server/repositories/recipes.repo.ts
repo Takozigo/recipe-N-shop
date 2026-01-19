@@ -22,14 +22,6 @@ export async function insertRecipe(
     shortDescription?: string
   },
 ) {
-  console.log({
-    title,
-    description,
-    servings,
-    prepTimeMinutes,
-    cookTimeMinutes,
-    shortDescription,
-  })
   const [row] = await tx
     .insert(recipes)
     .values({
@@ -83,11 +75,20 @@ export async function updateRecipeDb(
 }
 
 export async function getLatestRecipes() {
-  const res = await db.query.recipes.findMany({
+  return await db.query.recipes.findMany({
+    orderBy: desc(recipes.createdAt),
+    limit: 10,
+  })
+}
+
+export async function getAllRecipes() {
+  return await db.query.recipes.findMany({
+    columns: { title: true, id: true },
     orderBy: desc(recipes.createdAt),
   })
-  return res
 }
+
+getAllRecipes
 
 export async function getFullRecipesById(id: string) {
   return await db.query.recipes.findFirst({
