@@ -23,13 +23,11 @@ export function LoginForm({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(e.target)
 
     const formData = new FormData(e.currentTarget)
 
     const email = formData.get('email') as string
     const password = formData.get('password') as string
-    console.log({ email, password })
     const res = await login({ data: { email, password } })
 
     if (res.success) navigate({ to: '/admin' })

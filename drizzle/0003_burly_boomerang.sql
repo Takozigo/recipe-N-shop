@@ -1,0 +1,2 @@
+ALTER TABLE "recipe_ingredients" DROP CONSTRAINT "recipe_ingredients_recipe_id_ingredient_id_pk";--> statement-breakpoint
+ALTER TABLE "recipe_ingredients" ADD CONSTRAINT "recipe_ingredients_recipe_id_ingredient_id_section_pk" PRIMARY KEY("recipe_id","ingredient_id","section");

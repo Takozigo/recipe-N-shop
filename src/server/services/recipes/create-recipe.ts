@@ -36,10 +36,12 @@ export async function createRecipe(
       await insertCategories(tx, id, categories)
 
       await insertIngredients(tx, id, ingredients)
+
       await inserSteps(tx, id, steps)
 
       return { id, slug }
     })
+
     return {
       error: false,
       id: newRecipes.id,

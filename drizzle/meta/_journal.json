@@ -22,6 +22,20 @@
       "when": 1768536240134,
       "tag": "0002_woozy_sleeper",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1768560158115,
+      "tag": "0003_burly_boomerang",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1768605570164,
+      "tag": "0004_last_pretty_boy",
+      "breakpoints": true
     }
   ]
 }

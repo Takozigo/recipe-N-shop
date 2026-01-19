@@ -13,7 +13,6 @@ export const Route = createFileRoute('/_authenticated')({
     if (isAuthPage && user) {
       throw redirect({ to: '/admin' })
     }
-
     // Non-auth pages require login
     if (!isAuthPage && !user) {
       throw redirect({ to: '/' })

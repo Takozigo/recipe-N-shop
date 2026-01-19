@@ -6,6 +6,7 @@ import {
   getFullRecipesById,
   getFullRecipesBySlug,
 } from '@/server/repositories/recipes.repo'
+import { mapRawRecipeToForm } from '@/lib/types/recipe-form-values'
 
 export const getFullRecipesByIdFn = createServerFn({ method: 'GET' })
   .inputValidator((data: { id: string }) => data)
@@ -13,11 +14,7 @@ export const getFullRecipesByIdFn = createServerFn({ method: 'GET' })
     const recipe = await getFullRecipesById(data.id)
     if (recipe == null) throw notFound()
 
-    return {
-      ...recipe,
-      steps: formatSteps(recipe.steps),
-      ingredients: formatIngredientsBySection(recipe.ingredients),
-    }
+    return mapRawRecipeToForm(recipe)
   })
 
 export const getFullRecipesBySlugFn = createServerFn({ method: 'GET' })

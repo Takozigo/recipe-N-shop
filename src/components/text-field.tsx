@@ -148,6 +148,7 @@ export function FieldTextInput({
 export function FieldTextAreaInput({
   field,
   placeholder,
+  ...others
 }: FieldTextAreaInputProps) {
   const invalid = field.state.meta.isTouched && !field.state.meta.isValid
 
@@ -160,6 +161,7 @@ export function FieldTextAreaInput({
         value={field.state.value ?? ''}
         onBlur={field.handleBlur}
         onChange={(e) => field.handleChange(e.target.value)}
+        {...others}
       />
       {invalid && <FieldError errors={field.state.meta.errors} />}
     </Field>

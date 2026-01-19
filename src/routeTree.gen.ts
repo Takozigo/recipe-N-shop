@@ -12,12 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RecipesSlugIndexRouteImport } from './routes/recipes/$slug/index'
-import { Route as RecipesIdIndexRouteImport } from './routes/recipes/$id/index'
 import { Route as CategoriesSlugIndexRouteImport } from './routes/categories/$slug/index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminRegisterIndexRouteImport } from './routes/_authenticated/admin/register/index'
 import { Route as AuthenticatedAdminLoginIndexRouteImport } from './routes/_authenticated/admin/login/index'
 import { Route as AuthenticatedAdminRecipesNewIndexRouteImport } from './routes/_authenticated/admin/recipes/new/index'
+import { Route as AuthenticatedAdminRecipesIdEditIndexRouteImport } from './routes/_authenticated/admin/recipes/$id/edit/index'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -31,11 +31,6 @@ const IndexRoute = IndexRouteImport.update({
 const RecipesSlugIndexRoute = RecipesSlugIndexRouteImport.update({
   id: '/recipes/$slug/',
   path: '/recipes/$slug/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RecipesIdIndexRoute = RecipesIdIndexRouteImport.update({
-  id: '/recipes/$id/',
-  path: '/recipes/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategoriesSlugIndexRoute = CategoriesSlugIndexRouteImport.update({
@@ -66,26 +61,32 @@ const AuthenticatedAdminRecipesNewIndexRoute =
     path: '/admin/recipes/new/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminRecipesIdEditIndexRoute =
+  AuthenticatedAdminRecipesIdEditIndexRouteImport.update({
+    id: '/admin/recipes/$id/edit/',
+    path: '/admin/recipes/$id/edit/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AuthenticatedAdminIndexRoute
-  '/categories/$slug': typeof CategoriesSlugIndexRoute
-  '/recipes/$id': typeof RecipesIdIndexRoute
-  '/recipes/$slug': typeof RecipesSlugIndexRoute
-  '/admin/login': typeof AuthenticatedAdminLoginIndexRoute
-  '/admin/register': typeof AuthenticatedAdminRegisterIndexRoute
-  '/admin/recipes/new': typeof AuthenticatedAdminRecipesNewIndexRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/categories/$slug/': typeof CategoriesSlugIndexRoute
+  '/recipes/$slug/': typeof RecipesSlugIndexRoute
+  '/admin/login/': typeof AuthenticatedAdminLoginIndexRoute
+  '/admin/register/': typeof AuthenticatedAdminRegisterIndexRoute
+  '/admin/recipes/new/': typeof AuthenticatedAdminRecipesNewIndexRoute
+  '/admin/recipes/$id/edit/': typeof AuthenticatedAdminRecipesIdEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/categories/$slug': typeof CategoriesSlugIndexRoute
-  '/recipes/$id': typeof RecipesIdIndexRoute
   '/recipes/$slug': typeof RecipesSlugIndexRoute
   '/admin/login': typeof AuthenticatedAdminLoginIndexRoute
   '/admin/register': typeof AuthenticatedAdminRegisterIndexRoute
   '/admin/recipes/new': typeof AuthenticatedAdminRecipesNewIndexRoute
+  '/admin/recipes/$id/edit': typeof AuthenticatedAdminRecipesIdEditIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -93,51 +94,50 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/categories/$slug/': typeof CategoriesSlugIndexRoute
-  '/recipes/$id/': typeof RecipesIdIndexRoute
   '/recipes/$slug/': typeof RecipesSlugIndexRoute
   '/_authenticated/admin/login/': typeof AuthenticatedAdminLoginIndexRoute
   '/_authenticated/admin/register/': typeof AuthenticatedAdminRegisterIndexRoute
   '/_authenticated/admin/recipes/new/': typeof AuthenticatedAdminRecipesNewIndexRoute
+  '/_authenticated/admin/recipes/$id/edit/': typeof AuthenticatedAdminRecipesIdEditIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/admin'
-    | '/categories/$slug'
-    | '/recipes/$id'
-    | '/recipes/$slug'
-    | '/admin/login'
-    | '/admin/register'
-    | '/admin/recipes/new'
+    | '/admin/'
+    | '/categories/$slug/'
+    | '/recipes/$slug/'
+    | '/admin/login/'
+    | '/admin/register/'
+    | '/admin/recipes/new/'
+    | '/admin/recipes/$id/edit/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/categories/$slug'
-    | '/recipes/$id'
     | '/recipes/$slug'
     | '/admin/login'
     | '/admin/register'
     | '/admin/recipes/new'
+    | '/admin/recipes/$id/edit'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/_authenticated/admin/'
     | '/categories/$slug/'
-    | '/recipes/$id/'
     | '/recipes/$slug/'
     | '/_authenticated/admin/login/'
     | '/_authenticated/admin/register/'
     | '/_authenticated/admin/recipes/new/'
+    | '/_authenticated/admin/recipes/$id/edit/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   CategoriesSlugIndexRoute: typeof CategoriesSlugIndexRoute
-  RecipesIdIndexRoute: typeof RecipesIdIndexRoute
   RecipesSlugIndexRoute: typeof RecipesSlugIndexRoute
 }
 
@@ -146,7 +146,7 @@ declare module '@tanstack/react-router' {
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -160,50 +160,50 @@ declare module '@tanstack/react-router' {
     '/recipes/$slug/': {
       id: '/recipes/$slug/'
       path: '/recipes/$slug'
-      fullPath: '/recipes/$slug'
+      fullPath: '/recipes/$slug/'
       preLoaderRoute: typeof RecipesSlugIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/recipes/$id/': {
-      id: '/recipes/$id/'
-      path: '/recipes/$id'
-      fullPath: '/recipes/$id'
-      preLoaderRoute: typeof RecipesIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/categories/$slug/': {
       id: '/categories/$slug/'
       path: '/categories/$slug'
-      fullPath: '/categories/$slug'
+      fullPath: '/categories/$slug/'
       preLoaderRoute: typeof CategoriesSlugIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
       path: '/admin'
-      fullPath: '/admin'
+      fullPath: '/admin/'
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/register/': {
       id: '/_authenticated/admin/register/'
       path: '/admin/register'
-      fullPath: '/admin/register'
+      fullPath: '/admin/register/'
       preLoaderRoute: typeof AuthenticatedAdminRegisterIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/login/': {
       id: '/_authenticated/admin/login/'
       path: '/admin/login'
-      fullPath: '/admin/login'
+      fullPath: '/admin/login/'
       preLoaderRoute: typeof AuthenticatedAdminLoginIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/admin/recipes/new/': {
       id: '/_authenticated/admin/recipes/new/'
       path: '/admin/recipes/new'
-      fullPath: '/admin/recipes/new'
+      fullPath: '/admin/recipes/new/'
       preLoaderRoute: typeof AuthenticatedAdminRecipesNewIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/recipes/$id/edit/': {
+      id: '/_authenticated/admin/recipes/$id/edit/'
+      path: '/admin/recipes/$id/edit'
+      fullPath: '/admin/recipes/$id/edit/'
+      preLoaderRoute: typeof AuthenticatedAdminRecipesIdEditIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
   }
@@ -214,6 +214,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminLoginIndexRoute: typeof AuthenticatedAdminLoginIndexRoute
   AuthenticatedAdminRegisterIndexRoute: typeof AuthenticatedAdminRegisterIndexRoute
   AuthenticatedAdminRecipesNewIndexRoute: typeof AuthenticatedAdminRecipesNewIndexRoute
+  AuthenticatedAdminRecipesIdEditIndexRoute: typeof AuthenticatedAdminRecipesIdEditIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -222,6 +223,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminRegisterIndexRoute: AuthenticatedAdminRegisterIndexRoute,
   AuthenticatedAdminRecipesNewIndexRoute:
     AuthenticatedAdminRecipesNewIndexRoute,
+  AuthenticatedAdminRecipesIdEditIndexRoute:
+    AuthenticatedAdminRecipesIdEditIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -232,7 +235,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   CategoriesSlugIndexRoute: CategoriesSlugIndexRoute,
-  RecipesIdIndexRoute: RecipesIdIndexRoute,
   RecipesSlugIndexRoute: RecipesSlugIndexRoute,
 }
 export const routeTree = rootRouteImport

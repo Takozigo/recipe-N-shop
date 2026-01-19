@@ -6,7 +6,11 @@ import { RecipeFormStepper } from '@/components/recipe-form-stepper'
 import { Text } from '@/components/text'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription } from '@/components/ui/card'
-import { Carousel, CarouselContent } from '@/components/ui/carousel'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from '@/components/ui/carousel'
 import { Separator } from '@/components/ui/separator'
 import { useRecipeForm } from '@/hooks/use-recipe-form'
 import { getAllIngredientsFn } from '@/server/actions/ingredients/get-all-ingredients'
@@ -31,6 +35,7 @@ function RouteComponent() {
   const [api, setApi] = useState<CarouselApi>()
   const [count, setCount] = useState(0)
   const form = useRecipeForm()
+  const { categories, ingredients } = Route.useLoaderData()
 
   useEffect(() => {
     if (!api) {
@@ -55,9 +60,18 @@ function RouteComponent() {
           <CardContent>
             <Carousel setApi={setApi} disableKeyNavigation>
               <CarouselContent>
-                <RecipeInfoStep form={form} />
-                <RecipeIngredientsStep form={form} />
-                <RecipeStepsStep form={form} />
+                <CarouselItem>
+                  <RecipeInfoStep form={form} categories={categories} />
+                </CarouselItem>
+                <CarouselItem>
+                  <RecipeIngredientsStep
+                    form={form}
+                    ingredients={ingredients}
+                  />
+                </CarouselItem>
+                <CarouselItem>
+                  <RecipeStepsStep form={form} />
+                </CarouselItem>
               </CarouselContent>
             </Carousel>
           </CardContent>

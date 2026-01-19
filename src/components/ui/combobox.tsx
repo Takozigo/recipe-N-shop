@@ -64,7 +64,6 @@ export function Combobox({
                   key={d.value}
                   value={d.value}
                   onSelect={() => {
-                    console.log({d})
                     onSelect({
                       dataId: d.id,
                       value: d.value,

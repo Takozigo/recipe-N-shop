@@ -22,6 +22,14 @@ export async function insertRecipe(
     shortDescription?: string
   },
 ) {
+  console.log({
+    title,
+    description,
+    servings,
+    prepTimeMinutes,
+    cookTimeMinutes,
+    shortDescription,
+  })
   const [row] = await tx
     .insert(recipes)
     .values({
@@ -38,6 +46,42 @@ export async function insertRecipe(
   return { id: row.id, slug: row.slug }
 }
 
+export async function updateRecipeDb(
+  tx: DbClient,
+  {
+    id,
+    title,
+    description,
+    servings,
+    prepTimeMinutes,
+    cookTimeMinutes,
+    shortDescription,
+  }: {
+    id: string
+    title: string
+    servings?: number
+    prepTimeMinutes?: number
+    cookTimeMinutes?: number
+    description?: string
+    shortDescription?: string
+  },
+) {
+  const [res] = await tx
+    .update(recipes)
+    .set({
+      title,
+      slug: slugify(title),
+      description,
+      servings,
+      prepTimeMinutes,
+      cookTimeMinutes,
+      shortDescription,
+    })
+    .where(eq(recipes.id, id))
+    .returning({ slug: recipes.slug })
+  return res
+}
+
 export async function getLatestRecipes() {
   const res = await db.query.recipes.findMany({
     orderBy: desc(recipes.createdAt),
@@ -51,6 +95,11 @@ export async function getFullRecipesById(id: string) {
     with: {
       steps: {
         orderBy: (steps, { asc }) => [asc(steps.position)],
+      },
+      categories: {
+        with: {
+          category: true,
+        },
       },
       ingredients: {
         with: {
@@ -67,6 +116,11 @@ export async function getFullRecipesBySlug(slug: string) {
     with: {
       steps: {
         orderBy: (steps, { asc }) => [asc(steps.position)],
+      },
+      categories: {
+        with: {
+          category: true,
+        },
       },
       ingredients: {
         with: {

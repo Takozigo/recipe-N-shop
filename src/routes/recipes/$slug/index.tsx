@@ -29,14 +29,11 @@ function RouteComponent() {
           prepTimeMinutes={recipe.prepTimeMinutes}
           cookTimeMinutes={recipe.cookTimeMinutes}
         />
-        {/* <IngredientsSidebar
-          ingredients={recipe.ingredients}
-          portion={recipe.servings}
-        /> */}
+
         <SidebarTrigger />
 
         <div className="p-4">
-          <Text variant="p" className="whitespace-pre-wrap italic">
+          <Text variant="p" className="mb-4 whitespace-pre-wrap italic">
             {recipe.description}
           </Text>
           {recipe.steps.map((block) => {
@@ -55,7 +52,9 @@ function RouteComponent() {
             return (
               <section key={block.title}>
                 {block.title && <Text variant="h3">{block.title}</Text>}
-                <Text variant="list">{block.steps.map(renderStep)}</Text>
+                <Text variant="list" className="whitespace-pre-wrap">
+                  {block.steps.map(renderStep)}
+                </Text>
               </section>
             )
           })}
@@ -69,7 +68,9 @@ function renderStep(step: StepItem) {
   return (
     <div key={step.id}>
       {step.title && <Text variant="h4">{step.title}</Text>}
-      <Text variant="p">{step.description}</Text>
+      <Text variant="p" className="whitespace-pre-wrap">
+        {step.description}
+      </Text>
       {step.imageUrl && <img src={step.imageUrl} />}
     </div>
   )

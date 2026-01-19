@@ -33,21 +33,6 @@ export const recipes = pgTable('recipes', {
     .notNull(),
 })
 
-// export const recipeSections = pgTable(
-//   'recipe_sections',
-//   {
-//     id: uuid('id').defaultRandom().primaryKey(),
-
-//     recipeId: uuid('recipe_id')
-//       .notNull()
-//       .references(() => recipes.id, { onDelete: 'cascade' }),
-
-//     title: text('title'),
-//     position: integer('position').notNull(),
-//   },
-//   (table) => [index('recipe_sections_recipe_idx').on(table.recipeId)],
-// )
-
 export const recipeSteps = pgTable(
   'recipe_steps',
   {
@@ -58,9 +43,9 @@ export const recipeSteps = pgTable(
       .references(() => recipes.id, { onDelete: 'cascade' }),
 
     section: text('section'),
+    title: text('title'),
 
     position: integer('position').notNull(),
-    title: text('title'),
     description: text('description').notNull(),
     imageUrl: text('image_url'),
   },
@@ -91,14 +76,16 @@ export const recipeIngredients = pgTable(
       .notNull()
       .references(() => ingredients.id, { onDelete: 'restrict' }),
 
-    section: text('section'),
+    section: text('section').notNull().default('main'),
 
     unit: text('unit'),
     amount: numeric('amount', { precision: 10, scale: 2 }).notNull(),
     note: text('note'),
   },
   (table) => [
-    primaryKey({ columns: [table.recipeId, table.ingredientId] }),
+    primaryKey({
+      columns: [table.recipeId, table.ingredientId, table.section],
+    }),
     index('recipe_ingredients_recipe_idx').on(table.recipeId),
     sql`CHECK (
       ${table.unit} IS NULL
@@ -143,6 +130,24 @@ export const recipesRelations = relations(recipes, ({ many }) => ({
   categories: many(recipeCategories),
   steps: many(recipeSteps),
 }))
+
+export const categoriesRelations = relations(categories, ({ many }) => ({
+  recipeCategories: many(recipeCategories),
+}))
+
+export const recipeCategoriesRelations = relations(
+  recipeCategories,
+  ({ one }) => ({
+    recipe: one(recipes, {
+      fields: [recipeCategories.recipeId],
+      references: [recipes.id],
+    }),
+    category: one(categories, {
+      fields: [recipeCategories.categoryId],
+      references: [categories.id],
+    }),
+  }),
+)
 
 export const recipeIngredientsRelations = relations(
   recipeIngredients,

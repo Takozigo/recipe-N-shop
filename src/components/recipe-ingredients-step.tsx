@@ -1,11 +1,10 @@
-import { getRouteApi } from '@tanstack/react-router'
 import { TrashIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { Input } from './ui/input'
 import type { RecipeForm } from '@/hooks/use-recipe-form'
 import type { UnitKey } from '@/lib/constants/unit'
 import { FieldTextInput } from '@/components/text-field'
 import { Button } from '@/components/ui/button'
-import { CarouselItem } from '@/components/ui/carousel'
 import { Combobox } from '@/components/ui/combobox'
 import { FieldGroup } from '@/components/ui/field'
 import {
@@ -28,20 +27,86 @@ import {
 } from '@/components/ui/select'
 import { UNIT_GROUPS, UNIT_TYPE_LABELS } from '@/lib/constants/unit'
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { useSectionStore } from '@/store/sections'
+
 type RecipeIngredientsStepProps = {
   form: RecipeForm
+  ingredients: Array<{
+    id: string
+    value: string
+    lang: string
+  }>
 }
 
-function RecipeIngredientsStep({ form }: RecipeIngredientsStepProps) {
+function RecipeIngredientsStep({
+  form,
+  ingredients,
+}: RecipeIngredientsStepProps) {
+  const { sections, addSection, setSections, reset } = useSectionStore()
+  const sectionRef = useRef<HTMLInputElement>(null)
   const [pendingIngredient, setPendingIngredient] = useState<{
     dataId?: string
     value: string
   } | null>(null)
 
-  const { ingredients } = getRouteApi('/recipes/new/').useLoaderData()
+  useEffect(() => {
+    console.log(
+      form
+        .getFieldValue('ingredients')
+        .map((e: { section?: string }) => e.section),
+    )
+    setSections(
+      form
+        .getFieldValue('ingredients')
+        .map((e: { section?: string }) => e.section)
+        .filter((e) => e !== undefined),
+    )
+
+    return () => {
+      reset() // important when navigating between recipes
+    }
+  }, [form, setSections, reset])
 
   return (
-    <CarouselItem>
+    <>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button className="mb-4">Create Section (Optional)</Button>
+        </AlertDialogTrigger>
+
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Add a section to your recipe</AlertDialogTitle>
+            <AlertDialogDescription>
+              This is optional, it could be "sauce", "dough", "side" or anything
+              else.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <Input ref={sectionRef} />
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (sectionRef.current?.value)
+                  addSection(sectionRef.current.value)
+              }}
+            >
+              Add
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <FieldGroup>
         <form.Field name="ingredients" mode="array">
           {(field) => (
@@ -140,15 +205,26 @@ function RecipeIngredientsStep({ form }: RecipeIngredientsStepProps) {
                           </TableCell>
                         )}
                       </form.Field>
-
                       <form.Field name={`ingredients[${i}].section`}>
                         {(subField) => (
                           <TableCell>
-                            <FieldTextInput
-                              field={subField}
-                              placeholder="ex: Sauce (optional)"
-                              autoComplete="off"
-                            />
+                            <Select
+                              value={subField.state.value ?? ''}
+                              onValueChange={(value) =>
+                                subField.handleChange(value)
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Section (optional)" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {sections.map((section) => (
+                                  <SelectItem key={section} value={section}>
+                                    {section}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
                           </TableCell>
                         )}
                       </form.Field>
@@ -166,6 +242,7 @@ function RecipeIngredientsStep({ form }: RecipeIngredientsStepProps) {
 
                       <TableCell>
                         <Button
+                          type="button"
                           size="icon"
                           variant="destructive"
                           onClick={() => field.removeValue(i)}
@@ -181,7 +258,7 @@ function RecipeIngredientsStep({ form }: RecipeIngredientsStepProps) {
           )}
         </form.Field>
       </FieldGroup>
-    </CarouselItem>
+    </>
   )
 }
 
