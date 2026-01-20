@@ -3,13 +3,13 @@ import { CategoriesMenu } from '@/components/categorie-menu'
 import { LastRecipes } from '@/components/last-recipes'
 import { Text } from '@/components/text'
 import { getCategoriesFn } from '@/server/actions/categories/get-categories'
-import { getLatestRecipesFn } from '@/server/actions/recipes/get-latest'
+import { getRecipesFn } from '@/server/actions/recipes/get-recipes'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
   loader: async () => ({
-    categories: await getCategoriesFn(),
-    recipes: await getLatestRecipesFn(),
+    categories: await getCategoriesFn({ data: { limit: 8 } }),
+    recipes: await getRecipesFn({ data: { limit: 10 } }),
   }),
 })
 

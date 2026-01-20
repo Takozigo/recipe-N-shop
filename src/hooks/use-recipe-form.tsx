@@ -3,7 +3,7 @@ import { useServerFn } from '@tanstack/react-start'
 import { toast } from 'sonner'
 import type { RecipeInput } from '@/lib/schemas/recipe'
 import { recipeBaseSchema } from '@/lib/schemas/recipe'
-import { addRecipe, editRecipe } from '@/server/actions/recipes/add-recipe'
+import { addRecipeFn, editRecipeFn } from '@/server/actions/recipes/add-recipe'
 
 const defaultRecipe: RecipeInput = {
   title: '',
@@ -13,7 +13,7 @@ const defaultRecipe: RecipeInput = {
 }
 
 export function useRecipeForm(recipe?: RecipeInput) {
-  const handleRecipeForm = useServerFn(recipe ? editRecipe : addRecipe)
+  const handleRecipeForm = useServerFn(recipe ? editRecipeFn : addRecipeFn)
 
   return useForm({
     defaultValues: { ...defaultRecipe, ...recipe } as RecipeInput,

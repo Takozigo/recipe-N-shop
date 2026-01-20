@@ -4,7 +4,7 @@ import { createRecipeSchema, updateRecipeSchema } from '@/lib/schemas/recipe'
 import { createRecipe } from '@/server/services/recipes/create-recipe'
 import { updateRecipe } from '@/server/services/recipes/update-recipe'
 
-export const addRecipe = createServerFn({ method: 'POST' })
+export const addRecipeFn = createServerFn({ method: 'POST' })
   .inputValidator(createRecipeSchema)
   .handler(async ({ data }) => {
     const res = await createRecipe(data)
@@ -21,7 +21,7 @@ export const addRecipe = createServerFn({ method: 'POST' })
     }
   })
 
-export const editRecipe = createServerFn({ method: 'POST' })
+export const editRecipeFn = createServerFn({ method: 'POST' })
   .inputValidator(updateRecipeSchema)
   .handler(async ({ data }) => {
     const res = await updateRecipe(data)

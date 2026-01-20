@@ -2,10 +2,13 @@ import { count, desc, eq } from 'drizzle-orm'
 import { categories, recipeCategories } from '../db/schema'
 import { db } from '../db'
 import type { DbClient } from '../db'
+import type { Options } from '@/lib/types/options'
 import { slugify } from '@/lib/utils'
 
-export async function getCategories() {
-  return await db
+export async function getCategories(options: Options = {}) {
+  const { limit } = options
+
+  const query = db
     .select({
       id: categories.id,
       name: categories.name,
@@ -16,7 +19,14 @@ export async function getCategories() {
     .leftJoin(recipeCategories, eq(categories.id, recipeCategories.categoryId))
     .groupBy(categories.id)
     .orderBy(desc(count(recipeCategories.recipeId)))
-    .limit(8)
+
+  if (limit !== undefined) {
+    query.limit(limit)
+  }
+  if (options.offset !== undefined) {
+    query.offset(options.offset)
+  }
+  return await query
 }
 
 export async function insertCategories(

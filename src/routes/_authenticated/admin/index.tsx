@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button'
 import { logoutFn } from '@/server/actions/users/create-user'
 import { Text } from '@/components/text'
 import { Separator } from '@/components/ui/separator'
-import { getAllRecipesId } from '@/server/actions/recipes/get-all-recipe'
 import { Item, ItemActions, ItemContent } from '@/components/ui/item'
+import { getRecipesFn } from '@/server/actions/recipes/get-recipes'
 
 export const Route = createFileRoute('/_authenticated/admin/')({
   component: RouteComponent,
-  loader: () => getAllRecipesId(),
+  loader: () => getRecipesFn(),
 })
 
 function RouteComponent() {

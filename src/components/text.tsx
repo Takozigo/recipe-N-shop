@@ -132,8 +132,8 @@ export const Text: React.FC<TextProps> = ({
         <p
           className={cn(
             variant === 'p' && 'leading-7 not-first:mt-6',
-            variant === 'lead' && 'text-muted-foreground text-xl',
-            variant === 'muted' && 'text-muted-foreground text-sm',
+            variant === 'lead' && 'text-muted-foreground text-lg md:text-xl',
+            variant === 'muted' && 'text-muted-foreground text-xs md:text-sm',
             className,
           )}
           {...props}
