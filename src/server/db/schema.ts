@@ -1,4 +1,3 @@
-import { relations, sql } from 'drizzle-orm'
 import {
   index,
   integer,
@@ -10,59 +9,49 @@ import {
   unique,
   uuid,
 } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm'
 
-// export * from './auth-schema'
-
-export const recipes = pgTable('recipes', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  slug: text('slug').notNull(),
-
-  title: text('title').notNull(),
-  shortDescription: text('short_description'),
-  description: text('description'),
-
-  servings: integer('servings'),
-  prepTimeMinutes: integer('prep_time_minutes'),
-  cookTimeMinutes: integer('cook_time_minutes'),
-
-  createdAt: timestamp('created_at', { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  updatedAt: timestamp('updated_at', { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-})
-
-export const recipeSteps = pgTable(
-  'recipe_steps',
+export const categories = pgTable(
+  'categories',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-
-    recipeId: uuid('recipe_id')
-      .notNull()
-      .references(() => recipes.id, { onDelete: 'cascade' }),
-
-    section: text('section'),
-    title: text('title'),
-
-    position: integer('position').notNull(),
-    description: text('description').notNull(),
-    imageUrl: text('image_url'),
+    id: uuid().defaultRandom().primaryKey(),
+    name: text().notNull(),
+    slug: text().notNull(),
   },
   (table) => [
-    index('recipe_steps_recipe_idx').on(table.recipeId),
-    // index('recipe_steps_section_idx').on(table.sectionId),
+    unique('categories_name_unique').on(table.name),
+    unique('categories_slug_unique').on(table.slug),
   ],
 )
 
 export const ingredients = pgTable(
   'ingredients',
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    value: text('value').notNull(),
-    lang: text('lang').notNull(),
+    id: uuid().defaultRandom().primaryKey(),
+    value: text().notNull(),
+    lang: text().notNull(),
   },
-  (table) => [unique().on(table.value, table.lang)],
+  (table) => [
+    unique('ingredients_value_lang_unique').on(table.value, table.lang),
+  ],
+)
+
+export const recipeCategories = pgTable(
+  'recipe_categories',
+  {
+    recipeId: uuid('recipe_id')
+      .notNull()
+      .references(() => recipes.id, { onDelete: 'cascade' }),
+    categoryId: uuid('category_id')
+      .notNull()
+      .references(() => categories.id, { onDelete: 'cascade' }),
+  },
+  (table) => [
+    primaryKey({
+      columns: [table.recipeId, table.categoryId],
+      name: 'recipe_categories_recipe_id_category_id_pk',
+    }),
+  ],
 )
 
 export const recipeIngredients = pgTable(
@@ -71,132 +60,80 @@ export const recipeIngredients = pgTable(
     recipeId: uuid('recipe_id')
       .notNull()
       .references(() => recipes.id, { onDelete: 'cascade' }),
-
     ingredientId: uuid('ingredient_id')
       .notNull()
       .references(() => ingredients.id, { onDelete: 'restrict' }),
-
-    section: text('section').notNull().default('main'),
-
-    unit: text('unit'),
-    amount: numeric('amount', { precision: 10, scale: 2 }).notNull(),
-    note: text('note'),
+    section: text().default('main').notNull(),
+    amount: numeric({ precision: 10, scale: 2 }).notNull(),
+    unit: text(),
+    note: text(),
   },
   (table) => [
     primaryKey({
       columns: [table.recipeId, table.ingredientId, table.section],
+      name: 'recipe_ingredients_recipe_id_ingredient_id_section_pk',
     }),
-    index('recipe_ingredients_recipe_idx').on(table.recipeId),
-    sql`CHECK (
-      ${table.unit} IS NULL
-      OR ${table.unit} IN (Object.keys(UNITS)
-    )`,
+    index('recipe_ingredients_recipe_idx').using(
+      'btree',
+      table.recipeId.asc().nullsLast(),
+    ),
   ],
 )
 
-export const categories = pgTable('categories', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  name: text('name').notNull().unique(),
-  slug: text('slug').notNull().unique(),
-})
-
-export const recipeCategories = pgTable(
-  'recipe_categories',
+export const recipeSteps = pgTable(
+  'recipe_steps',
   {
+    id: uuid().defaultRandom().primaryKey(),
+    section: text(),
+    position: integer().notNull(),
+    title: text(),
+    description: text().notNull(),
+    imageUrl: text('image_url'),
     recipeId: uuid('recipe_id')
       .notNull()
       .references(() => recipes.id, { onDelete: 'cascade' }),
-
-    categoryId: uuid('category_id')
-      .notNull()
-      .references(() => categories.id, { onDelete: 'cascade' }),
   },
-  (table) => [primaryKey({ columns: [table.recipeId, table.categoryId] })],
+  (table) => [
+    index('recipe_steps_recipe_idx').using(
+      'btree',
+      table.recipeId.asc().nullsLast(),
+    ),
+  ],
 )
 
-// export const recipeStepPhotos = pgTable('recipe_step_photos', {
-//   id: uuid('id').defaultRandom().primaryKey(),
-
-//   stepId: uuid('step_id')
-//     .notNull()
-//     .references(() => recipeSteps.id, { onDelete: 'cascade' }),
-
-//   imageUrl: text('image_url').notNull(),
-//   position: integer('position').notNull(),
-// })
-
-export const recipesRelations = relations(recipes, ({ many }) => ({
-  ingredients: many(recipeIngredients),
-  categories: many(recipeCategories),
-  steps: many(recipeSteps),
-}))
-
-export const categoriesRelations = relations(categories, ({ many }) => ({
-  recipeCategories: many(recipeCategories),
-}))
-
-export const recipeCategoriesRelations = relations(
-  recipeCategories,
-  ({ one }) => ({
-    recipe: one(recipes, {
-      fields: [recipeCategories.recipeId],
-      references: [recipes.id],
-    }),
-    category: one(categories, {
-      fields: [recipeCategories.categoryId],
-      references: [categories.id],
-    }),
-  }),
-)
-
-export const recipeIngredientsRelations = relations(
-  recipeIngredients,
-  ({ one }) => ({
-    recipe: one(recipes, {
-      fields: [recipeIngredients.recipeId],
-      references: [recipes.id],
-    }),
-    ingredient: one(ingredients, {
-      fields: [recipeIngredients.ingredientId],
-      references: [ingredients.id],
-    }),
-  }),
-)
-
-export const recipeStepsRelations = relations(recipeSteps, ({ one }) => ({
-  recipe: one(recipes, {
-    fields: [recipeSteps.recipeId],
-    references: [recipes.id],
-  }),
-}))
-
-export const user = pgTable('users', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  username: text('username').notNull(),
-  email: text('email').notNull(),
-  password: text('password').notNull(),
-  salt: text('salt').notNull(),
+export const recipes = pgTable('recipes', {
+  id: uuid().defaultRandom().primaryKey(),
+  title: text().notNull(),
+  description: text(),
+  servings: integer(),
+  prepTimeMinutes: integer('prep_time_minutes'),
+  cookTimeMinutes: integer('cook_time_minutes'),
   createdAt: timestamp('created_at', { withTimezone: true })
-    .defaultNow()
+    .default(sql`now()`)
     .notNull(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
-    .defaultNow()
+    .default(sql`now()`)
     .notNull(),
+  shortDescription: text('short_description'),
+  slug: text().notNull(),
 })
 
-export const session = pgTable('sessions', {
-  id: uuid('id').defaultRandom().primaryKey(),
+export const sessions = pgTable('sessions', {
+  id: uuid().defaultRandom().primaryKey(),
   userId: uuid('user_id'),
   expires: timestamp('created_at', { withTimezone: true }),
 })
 
-export const userRelations = relations(user, ({ many }) => ({
-  sessions: many(session),
-}))
-
-export const sessionRelations = relations(session, ({ one }) => ({
-  user: one(user, {
-    fields: [session.userId],
-    references: [user.id],
-  }),
-}))
+export const users = pgTable('users', {
+  id: uuid().defaultRandom().primaryKey(),
+  username: text().notNull(),
+  password: text().notNull(),
+  salt: text().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
+  email: text().notNull(),
+})

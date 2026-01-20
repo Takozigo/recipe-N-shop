@@ -13,7 +13,7 @@ function RouteComponent() {
   return (
     <div className="container">
       {recipes.map((recipe) => (
-        <RecipeCard {...recipe} />
+        <RecipeCard {...recipe} key={recipe.id} />
       ))}
     </div>
   )

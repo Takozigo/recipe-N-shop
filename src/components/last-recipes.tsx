@@ -1,6 +1,6 @@
 import { getRouteApi } from '@tanstack/react-router'
 import { AnnoyedIcon } from 'lucide-react'
-import * as React from 'react'
+
 import {
   Empty,
   EmptyDescription,
@@ -10,7 +10,6 @@ import {
 } from './ui/empty'
 import { RecipeCard } from './recipe-card'
 
-import type { CarouselApi } from '@/components/ui/carousel'
 import {
   Carousel,
   CarouselContent,
@@ -23,14 +22,6 @@ export function LastRecipes() {
   const recipes = getRouteApi('/').useLoaderData({
     select: (data) => data.recipes,
   })
-
-  const [api, setApi] = React.useState<CarouselApi>()
-
-  React.useEffect(() => {
-    if (!api) {
-      return
-    }
-  }, [api])
 
   if (recipes.length === 0)
     return (
@@ -49,7 +40,6 @@ export function LastRecipes() {
 
   return (
     <Carousel
-      setApi={setApi}
       opts={{
         align: 'start',
         loop: true,

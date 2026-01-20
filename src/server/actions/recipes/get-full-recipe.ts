@@ -25,7 +25,7 @@ export const getFullRecipesBySlugFn = createServerFn({ method: 'GET' })
 
     return {
       ...recipe,
-      steps: formatSteps(recipe.steps),
-      ingredients: formatIngredientsBySection(recipe.ingredients),
+      steps: formatSteps(recipe.recipeSteps),
+      ingredients: formatIngredientsBySection(recipe.recipeIngredients),
     }
   })

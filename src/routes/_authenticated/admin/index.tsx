@@ -9,7 +9,7 @@ import { getRecipesFn } from '@/server/actions/recipes/get-recipes'
 
 export const Route = createFileRoute('/_authenticated/admin/')({
   component: RouteComponent,
-  loader: () => getRecipesFn(),
+  loader: async () => await getRecipesFn(),
 })
 
 function RouteComponent() {

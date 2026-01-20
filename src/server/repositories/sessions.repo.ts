@@ -1,13 +1,13 @@
 import { eq } from 'drizzle-orm'
 import { db } from '../db'
-import { session } from '../db/schema'
+import { sessions } from '../db/schema'
 
 export const createSession = (
   sessionId: string,
   expires: number,
   userId: string,
 ) => {
-  return db.insert(session).values({
+  return db.insert(sessions).values({
     id: sessionId,
     expires: new Date(expires),
     userId: userId,
@@ -15,18 +15,18 @@ export const createSession = (
 }
 
 export const getUserSessionById = (id: string) => {
-  return db.query.session.findFirst({ where: eq(session.id, id) })
+  return db.query.sessions.findFirst({ where: { id } })
 }
 
 export const updateSession = (id: string, expires: Date) => {
   return db
-    .update(session)
+    .update(sessions)
     .set({
       expires: expires,
     })
-    .where(eq(session.id, id))
+    .where(eq(sessions.id, id))
 }
 
 export const deleteSession = (id: string) => {
-  return db.delete(session).where(eq(session.id, id))
+  db.delete(sessions).where(eq(sessions.id, id))
 }
