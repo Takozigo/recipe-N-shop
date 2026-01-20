@@ -1,5 +1,6 @@
 import { asc, desc, eq } from 'drizzle-orm'
-import { recipes } from '../db/schema'
+import { notFound } from '@tanstack/react-router'
+import { categories, recipeCategories, recipes } from '../db/schema'
 import { db } from '../db'
 import type { DbClient } from '../db'
 import type { Options } from '@/lib/types/options'
@@ -76,12 +77,39 @@ export async function updateRecipeDb(
 }
 
 export async function getRecipes(options: Options = {}) {
-  const { limit, orderBy } = options
+  const { limit, orderBy, where } = options
   const query = db.query.recipes.findMany({
     columns: { title: true, id: true, slug: true },
     orderBy:
-      orderBy === 'acs' ? asc(recipes.createdAt) : desc(recipes.createdAt),
+      orderBy === 'asc' ? asc(recipes.createdAt) : desc(recipes.createdAt),
     ...(limit !== undefined ? { limit } : {}),
+    ...(where !== undefined ? { where } : {}),
+  })
+
+  return await query
+}
+
+export async function getRecipesByCategory(
+  category: string,
+  options: Options = {},
+) {
+  const { limit, orderBy } = options
+  const cat = await db.query.categories.findFirst({
+    where: eq(categories.slug, category),
+  })
+
+  if (!cat) throw notFound()
+
+  const query = db.query.recipes.findMany({
+    columns: { title: true, id: true, slug: true },
+    // with: { categories: { where: eq(recipeCategories.categoryId, cat.id) } },
+    orderBy:
+      orderBy === 'asc' ? asc(recipes.createdAt) : desc(recipes.createdAt),
+    ...(limit !== undefined ? { limit } : {}),
+
+    where: {
+      categories: eq(recipeCategories.categoryId, cat.id),
+    },
   })
 
   return await query

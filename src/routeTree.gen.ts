@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CategoriesIndexRouteImport } from './routes/categories/index'
 import { Route as RecipesSlugIndexRouteImport } from './routes/recipes/$slug/index'
 import { Route as CategoriesSlugIndexRouteImport } from './routes/categories/$slug/index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
@@ -26,6 +27,11 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategoriesIndexRoute = CategoriesIndexRouteImport.update({
+  id: '/categories/',
+  path: '/categories/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RecipesSlugIndexRoute = RecipesSlugIndexRouteImport.update({
@@ -70,6 +76,7 @@ const AuthenticatedAdminRecipesIdEditIndexRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/categories/': typeof CategoriesIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/categories/$slug/': typeof CategoriesSlugIndexRoute
   '/recipes/$slug/': typeof RecipesSlugIndexRoute
@@ -80,6 +87,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/categories': typeof CategoriesIndexRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/categories/$slug': typeof CategoriesSlugIndexRoute
   '/recipes/$slug': typeof RecipesSlugIndexRoute
@@ -92,6 +100,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/categories/': typeof CategoriesIndexRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/categories/$slug/': typeof CategoriesSlugIndexRoute
   '/recipes/$slug/': typeof RecipesSlugIndexRoute
@@ -104,6 +113,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/categories/'
     | '/admin/'
     | '/categories/$slug/'
     | '/recipes/$slug/'
@@ -114,6 +124,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/categories'
     | '/admin'
     | '/categories/$slug'
     | '/recipes/$slug'
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/categories/'
     | '/_authenticated/admin/'
     | '/categories/$slug/'
     | '/recipes/$slug/'
@@ -137,6 +149,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  CategoriesIndexRoute: typeof CategoriesIndexRoute
   CategoriesSlugIndexRoute: typeof CategoriesSlugIndexRoute
   RecipesSlugIndexRoute: typeof RecipesSlugIndexRoute
 }
@@ -155,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/categories/': {
+      id: '/categories/'
+      path: '/categories'
+      fullPath: '/categories/'
+      preLoaderRoute: typeof CategoriesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/recipes/$slug/': {
@@ -234,6 +254,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  CategoriesIndexRoute: CategoriesIndexRoute,
   CategoriesSlugIndexRoute: CategoriesSlugIndexRoute,
   RecipesSlugIndexRoute: RecipesSlugIndexRoute,
 }

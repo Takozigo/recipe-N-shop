@@ -1,11 +1,20 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { getCategoriesFn } from '@/server/actions/categories/get-categories'
+import { getRecipesByCategory } from '@/server/repositories/recipes.repo'
+import { RecipeCard } from '@/components/recipe-card'
 
 export const Route = createFileRoute('/categories/$slug/')({
   component: RouteComponent,
-  loader: async () => await getCategoriesFn(),
+  loader: async ({ params }) => await getRecipesByCategory(params.slug),
 })
 
 function RouteComponent() {
-  return <div>Hello "/categories/$slug/"!</div>
+  const recipes = Route.useLoaderData()
+
+  return (
+    <div className="container">
+      {recipes.map((recipe) => (
+        <RecipeCard {...recipe} />
+      ))}
+    </div>
+  )
 }
