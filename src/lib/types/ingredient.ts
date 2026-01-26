@@ -1,15 +1,15 @@
 export type ingredient = {
-  note: string | null
   recipeId: string
-  section: string | null
   ingredientId: string
-  unit: string | null
+  section: string
   amount: string
+  unit: string | null
+  note: string | null
   ingredient: {
-    value: string
     id: string
+    value: string
     lang: string
-  }
+  } | null
 }
 
 export type IngredientBlock =
@@ -48,9 +48,11 @@ export function formatIngredientsBySection(
 
   // Sort ingredients inside each section if needed
   for (const section of sections.values()) {
-    section.items.sort((a, b) =>
-      a.ingredient.value.localeCompare(b.ingredient.value),
-    )
+    section.items.sort((a, b) => {
+      if (a.ingredient && b.ingredient)
+        return a.ingredient.value.localeCompare(b.ingredient.value)
+      return 0
+    })
   }
 
   return [

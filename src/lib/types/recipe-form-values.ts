@@ -2,45 +2,41 @@ import type { UnitKey } from '../constants/unit'
 
 type RawFullRecipe = {
   id: string
+  slug: string
   title: string
-  shortDescription: string | null
   description: string | null
   servings: number | null
   prepTimeMinutes: number | null
   cookTimeMinutes: number | null
-  slug: string
   createdAt: Date
   updatedAt: Date
-  ingredients: Array<{
-    unit: string | null
-    ingredientId: string
-    amount: string
-    note: string | null
-    section: string | null
+  shortDescription: string | null
+  recipeIngredients: Array<{
     recipeId: string
+    ingredientId: string
+    section: string
+    amount: string
+    unit: string | null
+    note: string | null
     ingredient: {
       id: string
       value: string
       lang: string
-    }
+    } | null
   }>
-  steps: Array<{
+  recipeSteps: Array<{
     id: string
     title: string | null
     description: string
+    recipeId: string
     section: string | null
     position: number
     imageUrl: string | null
-    recipeId: string
   }>
   categories: Array<{
-    recipeId: string
-    categoryId: string
-    category: {
-      id: string
-      name: string
-      slug: string
-    }
+    id: string
+    name: string
+    slug: string
   }>
 }
 
@@ -87,16 +83,16 @@ export function mapRawRecipeToForm(recipe: RawFullRecipe): RecipeFormValues {
     prepTimeMinutes: recipe.prepTimeMinutes ?? undefined,
     cookTimeMinutes: recipe.cookTimeMinutes ?? undefined,
 
-    ingredients: recipe.ingredients.map((i) => ({
+    ingredients: recipe.recipeIngredients.map((i) => ({
       ingredientId: i.ingredientId,
-      ingredient: i.ingredient.value,
+      ingredient: i.ingredient?.value ?? '',
       amount: Number(i.amount),
       unit: (i.unit as UnitKey | null) ?? undefined,
       note: i.note ?? undefined,
-      section: i.section ?? undefined,
+      section: i.section,
     })),
 
-    steps: recipe.steps.map((s) => ({
+    steps: recipe.recipeSteps.map((s) => ({
       position: s.position,
       section: s.section ?? undefined,
       title: s.title ?? undefined,
@@ -105,9 +101,9 @@ export function mapRawRecipeToForm(recipe: RawFullRecipe): RecipeFormValues {
     })),
 
     categories: recipe.categories.map((c) => ({
-      id: c.category.id,
-      name: c.category.name,
-      slug: c.category.slug,
+      id: c.id,
+      name: c.name,
+      slug: c.slug,
     })),
   }
 }

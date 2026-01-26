@@ -29,7 +29,7 @@ export function LoginForm({
     const email = formData.get('email') as string
     const password = formData.get('password') as string
     const res = await login({ data: { email, password } })
-
+    console.log(res)
     if (res.success) navigate({ to: '/admin' })
   }
 

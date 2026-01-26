@@ -10,7 +10,7 @@ import {
 } from './ui/empty'
 import { Text } from './text'
 
-const AVAILABLE_CATEGORIES = new Set([
+export const AVAILABLE_CATEGORIES = new Set([
   'apero',
   'chicago',
   'coreen',

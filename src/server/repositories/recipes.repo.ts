@@ -1,4 +1,5 @@
-import { asc, desc, eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
+import { notFound } from '@tanstack/react-router'
 import { recipes } from '../db/schema'
 import { db } from '../db'
 import type { DbClient } from '../db'
@@ -79,9 +80,34 @@ export async function getRecipes(options: Options = {}) {
   const { limit, orderBy } = options
   const query = db.query.recipes.findMany({
     columns: { title: true, id: true, slug: true },
-    orderBy:
-      orderBy === 'acs' ? asc(recipes.createdAt) : desc(recipes.createdAt),
+    orderBy: { createdAt: orderBy },
+    limit,
+    // ...(limit !== undefined ? { limit } : {}),
+    // ...(where !== undefined ? { where } : {}),
+  })
+
+  return await query
+}
+
+export async function getRecipesByCategory(
+  category: string,
+  options: Options = {},
+) {
+  const { limit, orderBy } = options
+  const cat = await db.query.categories.findFirst({
+    where: { slug: category },
+  })
+
+  if (!cat) throw notFound()
+
+  const query = db.query.recipes.findMany({
+    columns: { title: true, id: true, slug: true },
+    // with: { categories: { where: eq(recipeCategories.categoryId, cat.id) } },
+    orderBy: { createdAt: orderBy },
     ...(limit !== undefined ? { limit } : {}),
+    where: {
+      categories: { id: cat.id },
+    },
   })
 
   return await query
@@ -89,42 +115,26 @@ export async function getRecipes(options: Options = {}) {
 
 export async function getFullRecipesById(id: string) {
   return await db.query.recipes.findFirst({
-    where: eq(recipes.id, id),
+    where: { id },
     with: {
-      steps: {
+      recipeSteps: {
         orderBy: (steps, { asc }) => [asc(steps.position)],
       },
-      categories: {
-        with: {
-          category: true,
-        },
-      },
-      ingredients: {
-        with: {
-          ingredient: true,
-        },
-      },
+      categories: true,
+      recipeIngredients: { with: { ingredient: true } },
     },
   })
 }
 
 export async function getFullRecipesBySlug(slug: string) {
   return await db.query.recipes.findFirst({
-    where: eq(recipes.slug, slug),
+    where: { slug },
     with: {
-      steps: {
+      recipeSteps: {
         orderBy: (steps, { asc }) => [asc(steps.position)],
       },
-      categories: {
-        with: {
-          category: true,
-        },
-      },
-      ingredients: {
-        with: {
-          ingredient: true,
-        },
-      },
+      categories: true,
+      recipeIngredients: { with: { ingredient: true } },
     },
   })
 }

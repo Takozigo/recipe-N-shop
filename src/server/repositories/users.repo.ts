@@ -1,6 +1,5 @@
-import { eq } from 'drizzle-orm'
 import { db } from '../db'
-import { user } from '../db/schema'
+import { users } from '../db/schema'
 
 export const createUser = ({
   email,
@@ -14,14 +13,14 @@ export const createUser = ({
   salt: string
 }) => {
   return db
-    .insert(user)
+    .insert(users)
     .values({ email, password, salt, username })
-    .returning({ id: user.id, email: user.email, username: user.username })
+    .returning({ id: users.id, email: users.email, username: users.username })
 }
 
 export const getUserFromDbById = (id: string) => {
-  return db.query.user.findFirst({
-    where: eq(user.id, id),
+  return db.query.users.findFirst({
+    where: { id },
     columns: {
       password: false,
       salt: false,
@@ -31,8 +30,8 @@ export const getUserFromDbById = (id: string) => {
 }
 
 export const getUserFromDbByEmail = (email: string) => {
-  return db.query.user.findFirst({
-    where: eq(user.email, email),
+  return db.query.users.findFirst({
+    where: { email },
     columns: {
       updatedAt: false,
     },

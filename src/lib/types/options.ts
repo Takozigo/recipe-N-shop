@@ -1,5 +1,5 @@
 export type Options = {
   limit?: number
-  orderBy?: 'desc' | 'acs'
+  orderBy?: 'desc' | 'asc'
   offset?: number
 }

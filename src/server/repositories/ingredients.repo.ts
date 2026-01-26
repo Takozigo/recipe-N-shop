@@ -1,4 +1,4 @@
-import { asc, eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 
 import { db } from '../db'
 import type { DbClient } from '../db'
@@ -9,7 +9,7 @@ import {
 
 export async function getAllIngredients() {
   return await db.query.ingredients.findMany({
-    orderBy: asc(ingredientsSchema.value),
+    orderBy: { value: 'desc' },
   })
 }
 
