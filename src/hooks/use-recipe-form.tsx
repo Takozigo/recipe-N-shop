@@ -18,6 +18,10 @@ export function useRecipeForm(recipe?: RecipeInput) {
   return useForm({
     defaultValues: { ...defaultRecipe, ...recipe } as RecipeInput,
     validators: { onSubmit: recipeBaseSchema },
+    onSubmitInvalid(props) {
+      console.log(props.value)
+      console.log(props.formApi.getAllErrors())
+    },
     onSubmit: ({ value }) => {
       toast.promise<
         | { error: true; message: string }

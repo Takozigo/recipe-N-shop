@@ -7,6 +7,8 @@ import { RecipeNotFound } from '@/components/not-found'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import IngredientsSidebar from '@/components/ingredients-sidebar'
 
+import SeeMore from '@/components/see-more'
+
 export const Route = createFileRoute('/recipes/$slug/')({
   component: RouteComponent,
   loader: async ({ params }) => await getFullRecipesBySlugFn({ data: params }),
@@ -33,19 +35,13 @@ function RouteComponent() {
         <SidebarTrigger />
 
         <div className="p-4">
-          <Text variant="p" className="mb-4 whitespace-pre-wrap italic">
-            {recipe.description}
-          </Text>
+          <SeeMore content={recipe.description} />
           {recipe.steps.map((block) => {
             if (block.type === 'steps') {
               return (
-                <Text
-                  variant="list"
-                  key="unsectioned"
-                  className="whitespace-pre-wrap"
-                >
+                <div className="whitespace-pre-wrap">
                   {block.steps.map(renderStep)}
-                </Text>
+                </div>
               )
             }
 
@@ -67,7 +63,11 @@ function RouteComponent() {
 function renderStep(step: StepItem) {
   return (
     <div key={step.id}>
-      {step.title && <Text variant="h4">{step.title}</Text>}
+      {step.title && (
+        <Text variant="h3" className="m-4">
+          {step.title}
+        </Text>
+      )}
       <Text variant="p" className="whitespace-pre-wrap">
         {step.description}
       </Text>

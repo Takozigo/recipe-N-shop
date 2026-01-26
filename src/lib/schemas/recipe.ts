@@ -19,7 +19,7 @@ export const recipeBaseSchema = z.object({
       amount: z.number().min(0.1),
       unit: unitSchema.optional(),
       note: z.string().optional(),
-      section: z.string().optional(),
+      section: z.string().optional().nullable(),
     }),
   ),
 

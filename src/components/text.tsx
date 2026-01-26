@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren, Ref } from 'react'
 import { cn } from '@/lib/utils'
 
 export type TextVariant =
@@ -19,6 +19,7 @@ export type TextProps = PropsWithChildren<
   {
     variant?: TextVariant
     className?: string
+    ref?: Ref<HTMLParagraphElement>
   } & React.HTMLAttributes<HTMLElement>
 >
 
@@ -26,6 +27,7 @@ export const Text: React.FC<TextProps> = ({
   variant = 'p',
   className,
   children,
+  ref,
   ...props
 }) => {
   switch (variant) {
@@ -136,6 +138,7 @@ export const Text: React.FC<TextProps> = ({
             variant === 'muted' && 'text-muted-foreground text-xs md:text-sm',
             className,
           )}
+          ref={ref}
           {...props}
         >
           {children}
