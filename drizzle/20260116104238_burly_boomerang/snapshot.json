@@ -1,8 +1,6 @@
 {
   "id": "3b97e775-2bed-4184-b965-7f8b0004ac39",
-  "prevIds": [
-    "6ae83d72-9b67-44c3-98ca-04ab4fe12905"
-  ],
+  "prevIds": ["6ae83d72-9b67-44c3-98ca-04ab4fe12905"],
   "version": "8",
   "dialect": "postgres",
   "ddl": [
@@ -13,9 +11,7 @@
       "entityType": "tables"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "categories_pkey",
       "schema": "public",
@@ -63,9 +59,7 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "name"
-      ],
+      "columns": ["name"],
       "nullsNotDistinct": false,
       "name": "categories_name_unique",
       "schema": "public",
@@ -74,9 +68,7 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "slug"
-      ],
+      "columns": ["slug"],
       "nullsNotDistinct": false,
       "name": "categories_slug_unique",
       "schema": "public",
@@ -90,9 +82,7 @@
       "entityType": "tables"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "ingredients_pkey",
       "schema": "public",
@@ -140,10 +130,7 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "value",
-        "lang"
-      ],
+      "columns": ["value", "lang"],
       "nullsNotDistinct": false,
       "name": "ingredients_value_lang_unique",
       "schema": "public",
@@ -183,10 +170,7 @@
       "entityType": "columns"
     },
     {
-      "columns": [
-        "recipe_id",
-        "category_id"
-      ],
+      "columns": ["recipe_id", "category_id"],
       "nameExplicit": false,
       "name": "recipe_categories_recipe_id_category_id_pk",
       "schema": "public",
@@ -195,14 +179,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "recipe_id"
-      ],
+      "columns": ["recipe_id"],
       "schemaTo": "public",
       "tableTo": "recipes",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "recipe_categories_recipe_id_recipes_id_fk",
@@ -212,14 +192,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "category_id"
-      ],
+      "columns": ["category_id"],
       "schemaTo": "public",
       "tableTo": "categories",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "recipe_categories_category_id_categories_id_fk",
@@ -312,11 +288,7 @@
       "entityType": "columns"
     },
     {
-      "columns": [
-        "recipe_id",
-        "ingredient_id",
-        "section"
-      ],
+      "columns": ["recipe_id", "ingredient_id", "section"],
       "nameExplicit": false,
       "name": "recipe_ingredients_recipe_id_ingredient_id_section_pk",
       "schema": "public",
@@ -346,14 +318,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "recipe_id"
-      ],
+      "columns": ["recipe_id"],
       "schemaTo": "public",
       "tableTo": "recipes",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "recipe_ingredients_recipe_id_recipes_id_fk",
@@ -363,14 +331,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "ingredient_id"
-      ],
+      "columns": ["ingredient_id"],
       "schemaTo": "public",
       "tableTo": "ingredients",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "RESTRICT",
       "name": "recipe_ingredients_ingredient_id_ingredients_id_fk",
@@ -385,9 +349,7 @@
       "entityType": "tables"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "recipe_steps_pkey",
       "schema": "public",
@@ -508,14 +470,10 @@
     },
     {
       "nameExplicit": false,
-      "columns": [
-        "recipe_id"
-      ],
+      "columns": ["recipe_id"],
       "schemaTo": "public",
       "tableTo": "recipes",
-      "columnsTo": [
-        "id"
-      ],
+      "columnsTo": ["id"],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
       "name": "recipe_steps_recipe_id_recipes_id_fk",
@@ -530,9 +488,7 @@
       "entityType": "tables"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "recipes_pkey",
       "schema": "public",
@@ -676,9 +632,7 @@
       "entityType": "tables"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "sessions_pkey",
       "schema": "public",
@@ -731,9 +685,7 @@
       "entityType": "tables"
     },
     {
-      "columns": [
-        "id"
-      ],
+      "columns": ["id"],
       "nameExplicit": false,
       "name": "users_pkey",
       "schema": "public",
