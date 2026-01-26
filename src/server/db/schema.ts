@@ -80,27 +80,6 @@ export const recipeIngredients = pgTable(
   ],
 )
 
-export const recipeSteps = pgTable(
-  'recipe_steps',
-  {
-    id: uuid().defaultRandom().primaryKey(),
-    section: text(),
-    position: integer().notNull(),
-    title: text(),
-    description: text().notNull(),
-    imageUrl: text('image_url'),
-    recipeId: uuid('recipe_id')
-      .notNull()
-      .references(() => recipes.id, { onDelete: 'cascade' }),
-  },
-  (table) => [
-    index('recipe_steps_recipe_idx').using(
-      'btree',
-      table.recipeId.asc().nullsLast(),
-    ),
-  ],
-)
-
 export const recipes = pgTable('recipes', {
   id: uuid().defaultRandom().primaryKey(),
   title: text().notNull(),
