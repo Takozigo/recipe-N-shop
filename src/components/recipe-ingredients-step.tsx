@@ -64,7 +64,7 @@ function RecipeIngredientsStep({
     setSections(
       form
         .getFieldValue('ingredients')
-        .map((e: { section?: string }) => e.section)
+        .map((e) => e.section ?? undefined)
         .filter((e) => e !== undefined),
     )
 

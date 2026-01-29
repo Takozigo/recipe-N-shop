@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm'
 import { notFound } from '@tanstack/react-router'
 import { recipes } from '../db/schema'
 import { db } from '../db'
+import type { JSONContent } from '@tiptap/react'
 import type { DbClient } from '../db'
 import type { Options } from '@/lib/types/options'
 import { slugify } from '@/lib/utils'
@@ -15,6 +16,7 @@ export async function insertRecipe(
     prepTimeMinutes,
     cookTimeMinutes,
     shortDescription,
+    content,
   }: {
     title: string
     servings?: number
@@ -22,6 +24,7 @@ export async function insertRecipe(
     cookTimeMinutes?: number
     description?: string
     shortDescription?: string
+    content: JSONContent
   },
 ) {
   const [row] = await tx
@@ -34,6 +37,7 @@ export async function insertRecipe(
       prepTimeMinutes,
       cookTimeMinutes,
       shortDescription,
+      content,
     })
     .returning({ id: recipes.id, slug: recipes.slug })
 
@@ -50,6 +54,7 @@ export async function updateRecipeDb(
     prepTimeMinutes,
     cookTimeMinutes,
     shortDescription,
+    content,
   }: {
     id: string
     title: string
@@ -58,6 +63,7 @@ export async function updateRecipeDb(
     cookTimeMinutes?: number
     description?: string
     shortDescription?: string
+    content: JSONContent
   },
 ) {
   const [res] = await tx
@@ -70,6 +76,7 @@ export async function updateRecipeDb(
       prepTimeMinutes,
       cookTimeMinutes,
       shortDescription,
+      content,
     })
     .where(eq(recipes.id, id))
     .returning({ slug: recipes.slug })
@@ -117,9 +124,6 @@ export async function getFullRecipesById(id: string) {
   return await db.query.recipes.findFirst({
     where: { id },
     with: {
-      recipeSteps: {
-        orderBy: (steps, { asc }) => [asc(steps.position)],
-      },
       categories: true,
       recipeIngredients: { with: { ingredient: true } },
     },
@@ -130,9 +134,6 @@ export async function getFullRecipesBySlug(slug: string) {
   return await db.query.recipes.findFirst({
     where: { slug },
     with: {
-      recipeSteps: {
-        orderBy: (steps, { asc }) => [asc(steps.position)],
-      },
       categories: true,
       recipeIngredients: { with: { ingredient: true } },
     },

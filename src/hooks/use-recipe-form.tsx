@@ -8,15 +8,18 @@ import { addRecipeFn, editRecipeFn } from '@/server/actions/recipes/add-recipe'
 const defaultRecipe: RecipeInput = {
   title: '',
   ingredients: [],
-  steps: [],
   categories: [],
+  content: { type: 'doc', content: [] },
 }
 
 export function useRecipeForm(recipe?: RecipeInput) {
   const handleRecipeForm = useServerFn(recipe ? editRecipeFn : addRecipeFn)
 
   return useForm({
-    defaultValues: { ...defaultRecipe, ...recipe } as RecipeInput,
+    defaultValues: {
+      ...defaultRecipe,
+      ...recipe,
+    } as RecipeInput,
     validators: { onSubmit: recipeBaseSchema },
     onSubmitInvalid(props) {
       console.log(props.value)
