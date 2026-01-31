@@ -1,1 +1,0 @@
-ALTER TABLE "recipes" ALTER COLUMN "content" SET NOT NULL;

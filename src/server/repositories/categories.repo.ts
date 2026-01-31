@@ -6,27 +6,34 @@ import type { Options } from '@/lib/types/options'
 import { slugify } from '@/lib/utils'
 
 export async function getCategories(options: Options = {}) {
-  const { limit } = options
+  try {
+    const query = db
+      .select({
+        id: categories.id,
+        name: categories.name,
+        slug: categories.slug,
+        recipeCount: count(recipeCategories.recipeId),
+      })
+      .from(categories)
+      .leftJoin(
+        recipeCategories,
+        eq(categories.id, recipeCategories.categoryId),
+      )
+      .groupBy(categories.id)
+      .orderBy(desc(count(recipeCategories.recipeId)))
 
-  const query = db
-    .select({
-      id: categories.id,
-      name: categories.name,
-      slug: categories.slug,
-      recipeCount: count(recipeCategories.recipeId),
-    })
-    .from(categories)
-    .leftJoin(recipeCategories, eq(categories.id, recipeCategories.categoryId))
-    .groupBy(categories.id)
-    .orderBy(desc(count(recipeCategories.recipeId)))
+    if (options.limit !== undefined) {
+      query.limit(Number(options.limit))
+    }
 
-  if (limit !== undefined) {
-    query.limit(limit)
+    if (options.offset !== undefined) {
+      query.offset(options.offset)
+    }
+    return await query
+  } catch (e) {
+    console.log(e)
+    return []
   }
-  if (options.offset !== undefined) {
-    query.offset(options.offset)
-  }
-  return await query
 }
 
 export async function insertCategories(
