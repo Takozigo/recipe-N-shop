@@ -1,11 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
+
+import { generateHTML } from '@tiptap/react'
+import { useMemo } from 'react'
 import { getFullRecipesBySlugFn } from '@/server/actions/recipes/get-full-recipe'
 import { RecipeHeroCard } from '@/components/recipe-hero-card'
 import { RecipeNotFound } from '@/components/not-found'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import IngredientsSidebar from '@/components/ingredients-sidebar'
-
 import SeeMore from '@/components/see-more'
+import { EDITOR_OPTIONS } from '@/components/tiptap/tiptap-editor/editor'
 
 export const Route = createFileRoute('/recipes/$slug/')({
   component: RouteComponent,
@@ -15,6 +18,15 @@ export const Route = createFileRoute('/recipes/$slug/')({
 
 function RouteComponent() {
   const recipe = Route.useLoaderData()
+
+  // ! TODO TO SANITIZE
+  // ! import DOMPurify from 'dompurify'
+  // ! const safeHTML = DOMPurify.sanitize(html)
+
+  const html = useMemo(
+    () => generateHTML(recipe.content, EDITOR_OPTIONS),
+    [recipe.content],
+  )
 
   return (
     <SidebarProvider>
@@ -35,7 +47,10 @@ function RouteComponent() {
         <div className="p-4">
           <SeeMore content={recipe.description} />
 
-          <div className="whitespace-pre-wrap">{recipe.steps}</div>
+          <div
+            className="prose prose-neutral dark:prose-invert max-w-none"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
         </div>
       </div>
     </SidebarProvider>

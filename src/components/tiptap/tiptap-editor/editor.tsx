@@ -15,8 +15,6 @@ import { Superscript } from '@tiptap/extension-superscript'
 import { Selection } from '@tiptap/extensions'
 import type { Content, JSONContent } from '@tiptap/react'
 
-// --- UI Primitives ---
-import { Button } from '@/components/tiptap/tiptap-ui-primitive/button'
 import { Spacer } from '@/components/tiptap/tiptap-ui-primitive/spacer'
 import {
   Toolbar,
@@ -67,6 +65,7 @@ import { MAX_FILE_SIZE, handleImageUpload } from '@/lib/tiptap-utils'
 
 // --- Styles ---
 import '@/components/tiptap/tiptap-editor/editor.scss'
+import { Button } from '@/components/ui/button'
 
 const MainToolbarContent = ({
   onHighlighterClick,
@@ -179,6 +178,26 @@ interface Editor {
   onChange: (j: JSONContent) => void
 }
 
+export const EDITOR_OPTIONS = [
+  StarterKit.configure({
+    horizontalRule: false,
+    link: {
+      openOnClick: false,
+      enableClickSelection: true,
+    },
+  }),
+  HorizontalRule,
+  TextAlign.configure({ types: ['heading', 'paragraph'] }),
+  TaskList,
+  TaskItem.configure({ nested: true }),
+  Highlight.configure({ multicolor: true }),
+  Image,
+  Typography,
+  Superscript,
+  Subscript,
+  Selection,
+]
+
 export function Editor({ content, onChange }: Editor) {
   const isMobile = useIsBreakpoint()
   const { height } = useWindowSize()
@@ -199,23 +218,7 @@ export function Editor({ content, onChange }: Editor) {
       },
     },
     extensions: [
-      StarterKit.configure({
-        horizontalRule: false,
-        link: {
-          openOnClick: false,
-          enableClickSelection: true,
-        },
-      }),
-      HorizontalRule,
-      TextAlign.configure({ types: ['heading', 'paragraph'] }),
-      TaskList,
-      TaskItem.configure({ nested: true }),
-      Highlight.configure({ multicolor: true }),
-      Image,
-      Typography,
-      Superscript,
-      Subscript,
-      Selection,
+      ...EDITOR_OPTIONS,
       ImageUploadNode.configure({
         accept: 'image/*',
         maxSize: MAX_FILE_SIZE,
@@ -224,7 +227,10 @@ export function Editor({ content, onChange }: Editor) {
         onError: (error) => console.error('Upload failed:', error),
       }),
     ],
-    // onUpdate: console.log,
+    onUpdate: ({ editor }) => {
+      const json = editor.getJSON()
+      onChange(json) // Pass HTML to parent component
+    },
     content: content,
   })
 
