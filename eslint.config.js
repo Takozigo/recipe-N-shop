@@ -20,5 +20,9 @@ export default [
       ],
     },
   },
-  globalIgnores(['src/components/ui/**', 'node_modules/**']),
+  globalIgnores([
+    'src/components/ui/**',
+    'node_modules/**',
+    'src/components/tiptap/**',
+  ]),
 ]

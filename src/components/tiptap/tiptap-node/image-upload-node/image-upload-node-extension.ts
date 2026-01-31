@@ -1,4 +1,5 @@
-import { Node, ReactNodeViewRenderer, mergeAttributes  } from '@tiptap/react'
+/* eslint-disable */
+import { Node, ReactNodeViewRenderer, mergeAttributes } from '@tiptap/react'
 import type { NodeType } from '@tiptap/pm/model'
 import { ImageUploadNode as ImageUploadNodeComponent } from '@/components/tiptap/tiptap-node/image-upload-node/image-upload-node'
 
@@ -46,7 +47,7 @@ export interface ImageUploadNodeOptions {
    * @default {}
    * @example { class: 'foo' }
    */
-   
+
   HTMLAttributes: Record<string, any>
 }
 

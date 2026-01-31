@@ -11,9 +11,6 @@ import {
 import {
   FloatingDelayGroup,
   FloatingPortal,
-  
-  
-  
   autoUpdate,
   flip,
   offset,
@@ -24,9 +21,13 @@ import {
   useHover,
   useInteractions,
   useMergeRefs,
-  useRole
+  useRole,
 } from '@floating-ui/react'
-import type {Placement, ReferenceType, UseFloatingReturn} from '@floating-ui/react';
+import type {
+  Placement,
+  ReferenceType,
+  UseFloatingReturn,
+} from '@floating-ui/react'
 import '@/components/tiptap/tiptap-ui-primitive/tooltip/tooltip.scss'
 
 interface TooltipProviderProps {
@@ -168,10 +169,8 @@ export const TooltipTrigger = forwardRef<HTMLElement, TooltipTriggerProps>(
     const context = useTooltipContext()
     const childrenRef = isValidElement(children)
       ? parseInt(version, 10) >= 19
-        ?  
-          (children as { props: { ref?: React.Ref<any> } }).props.ref
-        :  
-          (children as any).ref
+        ? (children as { props: { ref?: React.Ref<any> } }).props.ref
+        : (children as any).ref
       : undefined
     const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef])
 

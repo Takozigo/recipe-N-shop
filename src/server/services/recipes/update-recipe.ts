@@ -19,7 +19,6 @@ export async function updateRecipe(
     prepTimeMinutes,
     cookTimeMinutes,
     ingredients,
-    steps,
     categories,
     shortDescription,
     content,
@@ -35,7 +34,6 @@ export async function updateRecipe(
         prepTimeMinutes,
         cookTimeMinutes,
         shortDescription,
-        steps,
         content,
       })
 

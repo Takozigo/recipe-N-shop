@@ -227,8 +227,8 @@ export function Editor({ content, onChange }: Editor) {
         onError: (error) => console.error('Upload failed:', error),
       }),
     ],
-    onUpdate: ({ editor }) => {
-      const json = editor.getJSON()
+    onUpdate: (updatedData) => {
+      const json = updatedData.editor.getJSON()
       onChange(json) // Pass HTML to parent component
     },
     content: content,

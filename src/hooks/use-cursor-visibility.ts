@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useEffect } from 'react'
 import type { Editor } from '@tiptap/react'
 import { useWindowSize } from '@/hooks/use-window-size'

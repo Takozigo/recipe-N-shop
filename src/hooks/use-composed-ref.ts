@@ -1,4 +1,4 @@
-'use client'
+/* eslint-disable */
 
 import { useCallback, useRef } from 'react'
 

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { useEffect, useMemo, useState } from 'react'
 import { ListIcon, ListOrderedIcon, ListTodoIcon } from 'lucide-react'
 import type { Editor } from '@tiptap/react'

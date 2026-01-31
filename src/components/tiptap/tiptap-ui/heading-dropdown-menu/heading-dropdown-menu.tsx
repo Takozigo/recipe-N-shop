@@ -74,7 +74,6 @@ export const HeadingDropdownMenu = forwardRef<
       },
       [canToggle, editor, onOpenChange],
     )
-    console.log({ isOpen, isVisible, isActive })
     if (!isVisible) {
       return null
     }

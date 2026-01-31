@@ -21,7 +21,7 @@ const defaultOptions: ThrottleSettings = {
  * @param dependencies The dependencies to watch for changes
  * @param options The throttle options
  */
- 
+
 export function useThrottledCallback<T extends (...args: Array<any>) => any>(
   fn: T,
   wait = 250,
@@ -32,11 +32,7 @@ export function useThrottledCallback<T extends (...args: Array<any>) => any>(
   cancel: () => void
   flush: () => void
 } {
-  const handler = useMemo(
-    () => throttle<T>(fn, wait, options),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    dependencies,
-  )
+  const handler = useMemo(() => throttle<T>(fn, wait, options), dependencies)
 
   useUnmount(() => {
     handler.cancel()
