@@ -1,0 +1,1 @@
+ALTER TABLE "recipes" ALTER COLUMN "steps" DROP NOT NULL;

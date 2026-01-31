@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { ModeToggle } from './theme-toggle'
 
 function header() {
   return (
@@ -7,6 +8,7 @@ function header() {
         <Link to={'/'} className="text-primary">
           RECIPES
         </Link>
+        <ModeToggle />
       </div>
     </header>
   )

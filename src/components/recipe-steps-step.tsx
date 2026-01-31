@@ -1,7 +1,8 @@
-import type { RecipeForm } from '@/hooks/use-recipe-form'
+import { Editor } from './tiptap/tiptap-editor/editor'
 import type { Content, JSONContent } from '@tiptap/react'
+import type { RecipeForm } from '@/hooks/use-recipe-form'
+
 import { Field, FieldGroup } from '@/components/ui/field'
-import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor'
 
 type RecipeStepsStepProps = {
   form: RecipeForm
@@ -18,7 +19,7 @@ const RecipeStepsStep = ({ form }: RecipeStepsStepProps) => {
             field.state.meta.isTouched && !field.state.meta.isValid
           return (
             <Field data-invalid={invalid}>
-              <SimpleEditor
+              <Editor
                 content={field.state.value as Content}
                 onChange={field.handleChange as (j: JSONContent) => void}
               />

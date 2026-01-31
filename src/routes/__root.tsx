@@ -5,6 +5,8 @@ import appCss from '../styles.css?url'
 import Header from '@/components/header'
 import { Toaster } from '@/components/ui/sonner'
 import { NotFound } from '@/components/not-found'
+import { getThemeServerFn } from '@/lib/theme'
+import { ThemeProvider } from '@/lib/providers/theme-provider'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -27,20 +29,25 @@ export const Route = createRootRoute({
       },
     ],
   }),
+  loader: () => getThemeServerFn(),
   shellComponent: RootDocument,
   notFoundComponent: () => <NotFound />,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const theme = Route.useLoaderData()
+
   return (
-    <html lang="en">
+    <html lang="en" className={theme} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        <Header />
-        <main className="pt-10 md:pt-20">{children}</main>
-        <Toaster />
+        <ThemeProvider theme={theme}>
+          <Header />
+          <main className="pt-10 md:pt-20">{children}</main>
+          <Toaster />
+        </ThemeProvider>
         <TanStackDevtools
           config={{
             position: 'bottom-right',
