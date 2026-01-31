@@ -3,7 +3,6 @@ import { db } from '@/server/db'
 import { updateRecipeCategories } from '@/server/repositories/categories.repo'
 import { updateRecipeIngredients } from '@/server/repositories/ingredients.repo'
 import { updateRecipeDb } from '@/server/repositories/recipes.repo'
-import { updateRecipeSteps } from '@/server/repositories/steps.repo'
 
 export async function updateRecipe(
   data: RecipeUpdateInput,
@@ -20,9 +19,9 @@ export async function updateRecipe(
     prepTimeMinutes,
     cookTimeMinutes,
     ingredients,
-    steps,
     categories,
     shortDescription,
+    content,
   } = data
 
   try {
@@ -35,13 +34,12 @@ export async function updateRecipe(
         prepTimeMinutes,
         cookTimeMinutes,
         shortDescription,
+        content,
       })
 
       await updateRecipeCategories(tx, id, categories)
 
       await updateRecipeIngredients(tx, id, ingredients)
-
-      await updateRecipeSteps(tx, id, steps)
 
       return { id, slug }
     })

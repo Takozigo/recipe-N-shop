@@ -1,3 +1,5 @@
+import type { TiptapDoc } from '../schemas/recipe'
+import type { JSONContent } from '@tiptap/react'
 import type { UnitKey } from '../constants/unit'
 
 type RawFullRecipe = {
@@ -24,15 +26,7 @@ type RawFullRecipe = {
       lang: string
     } | null
   }>
-  recipeSteps: Array<{
-    id: string
-    title: string | null
-    description: string
-    recipeId: string
-    section: string | null
-    position: number
-    imageUrl: string | null
-  }>
+  content: JSONContent
   categories: Array<{
     id: string
     name: string
@@ -53,18 +47,12 @@ export type RecipeFormValues = {
     ingredientId?: string
     ingredient: string
     amount: number
-    unit?: UnitKey
+    unit: UnitKey
     note?: string
     section?: string
   }>
 
-  steps: Array<{
-    position: number
-    section?: string
-    title?: string
-    description: string
-    imageUrl?: string
-  }>
+  content: TiptapDoc
 
   categories: Array<{
     id?: string
@@ -82,22 +70,15 @@ export function mapRawRecipeToForm(recipe: RawFullRecipe): RecipeFormValues {
     servings: recipe.servings ?? undefined,
     prepTimeMinutes: recipe.prepTimeMinutes ?? undefined,
     cookTimeMinutes: recipe.cookTimeMinutes ?? undefined,
+    content: recipe.content as TiptapDoc,
 
     ingredients: recipe.recipeIngredients.map((i) => ({
       ingredientId: i.ingredientId,
       ingredient: i.ingredient?.value ?? '',
       amount: Number(i.amount),
-      unit: (i.unit as UnitKey | null) ?? undefined,
+      unit: i.unit as UnitKey,
       note: i.note ?? undefined,
       section: i.section,
-    })),
-
-    steps: recipe.recipeSteps.map((s) => ({
-      position: s.position,
-      section: s.section ?? undefined,
-      title: s.title ?? undefined,
-      description: s.description,
-      imageUrl: s.imageUrl ?? undefined,
     })),
 
     categories: recipe.categories.map((c) => ({

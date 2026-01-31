@@ -3,7 +3,6 @@ import { db } from '@/server/db'
 import { insertCategories } from '@/server/repositories/categories.repo'
 import { insertIngredients } from '@/server/repositories/ingredients.repo'
 import { insertRecipe } from '@/server/repositories/recipes.repo'
-import { inserSteps } from '@/server/repositories/steps.repo'
 
 export async function createRecipe(
   data: RecipeInput,
@@ -19,7 +18,7 @@ export async function createRecipe(
     prepTimeMinutes,
     cookTimeMinutes,
     ingredients,
-    steps,
+    content,
     shortDescription,
     categories,
   } = data
@@ -33,13 +32,12 @@ export async function createRecipe(
         prepTimeMinutes,
         cookTimeMinutes,
         shortDescription,
+        content,
       })
 
       await insertCategories(tx, id, categories)
 
       await insertIngredients(tx, id, ingredients)
-
-      await inserSteps(tx, id, steps)
 
       return { id, slug }
     })

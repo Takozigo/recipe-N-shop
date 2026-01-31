@@ -11,9 +11,7 @@ export const relations = defineRelations(schema, (r) => ({
   recipes: {
     categories: r.many.categories(),
     recipeIngredients: r.many.recipeIngredients(),
-    recipeSteps: r.many.recipeSteps(),
   },
-
   recipeIngredients: {
     recipe: r.one.recipes({
       from: r.recipeIngredients.recipeId,
@@ -26,11 +24,5 @@ export const relations = defineRelations(schema, (r) => ({
   },
   ingredients: {
     recipeIngredients: r.many.recipeIngredients(),
-  },
-  recipeSteps: {
-    recipe: r.one.recipes({
-      from: r.recipeSteps.recipeId,
-      to: r.recipes.id,
-    }),
   },
 }))

@@ -1,7 +1,6 @@
 import { notFound } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { formatIngredientsBySection } from '@/lib/types/ingredient'
-import { formatSteps } from '@/lib/types/step'
 import {
   getFullRecipesById,
   getFullRecipesBySlug,
@@ -25,7 +24,6 @@ export const getFullRecipesBySlugFn = createServerFn({ method: 'GET' })
 
     return {
       ...recipe,
-      steps: formatSteps(recipe.recipeSteps),
       ingredients: formatIngredientsBySection(recipe.recipeIngredients),
     }
   })

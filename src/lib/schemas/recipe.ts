@@ -1,6 +1,15 @@
 import z from 'zod'
 import { unitSchema } from '../constants/unit'
 
+import type { JSONContent } from '@tiptap/react'
+
+export const tiptapContentSchema = z.object({
+  type: z.literal('doc'), // KEEP THIS
+  content: z.array(z.any()),
+}) satisfies z.ZodType<JSONContent>
+
+export type TiptapDoc = z.infer<typeof tiptapContentSchema>
+
 export const recipeBaseSchema = z.object({
   id: z.string().optional(),
 
@@ -12,24 +21,16 @@ export const recipeBaseSchema = z.object({
   prepTimeMinutes: z.number().min(0).optional(),
   cookTimeMinutes: z.number().min(0).optional(),
 
+  content: tiptapContentSchema,
+
   ingredients: z.array(
     z.object({
       ingredientId: z.string().optional(),
       ingredient: z.string(),
       amount: z.number().min(0.1),
-      unit: unitSchema.optional(),
+      unit: unitSchema,
       note: z.string().optional(),
-      section: z.string().optional().nullable(),
-    }),
-  ),
-
-  steps: z.array(
-    z.object({
       section: z.string().optional(),
-      position: z.number().min(1),
-      title: z.string().optional(),
-      description: z.string(),
-      imageUrl: z.string().optional(),
     }),
   ),
 
@@ -44,7 +45,6 @@ export const recipeBaseSchema = z.object({
 
 export const createRecipeSchema = recipeBaseSchema.extend({
   ingredients: recipeBaseSchema.shape.ingredients.nonempty(),
-  steps: recipeBaseSchema.shape.steps.nonempty(),
   categories: recipeBaseSchema.shape.categories.nonempty(),
 })
 

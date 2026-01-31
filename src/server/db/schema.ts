@@ -1,6 +1,7 @@
 import {
   index,
   integer,
+  jsonb,
   numeric,
   pgTable,
   primaryKey,
@@ -10,6 +11,7 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
+import type { JSONContent } from '@tiptap/react'
 
 export const categories = pgTable(
   'categories',
@@ -65,7 +67,7 @@ export const recipeIngredients = pgTable(
       .references(() => ingredients.id, { onDelete: 'restrict' }),
     section: text().default('main').notNull(),
     amount: numeric({ precision: 10, scale: 2 }).notNull(),
-    unit: text(),
+    unit: text().notNull(),
     note: text(),
   },
   (table) => [
@@ -74,27 +76,6 @@ export const recipeIngredients = pgTable(
       name: 'recipe_ingredients_recipe_id_ingredient_id_section_pk',
     }),
     index('recipe_ingredients_recipe_idx').using(
-      'btree',
-      table.recipeId.asc().nullsLast(),
-    ),
-  ],
-)
-
-export const recipeSteps = pgTable(
-  'recipe_steps',
-  {
-    id: uuid().defaultRandom().primaryKey(),
-    section: text(),
-    position: integer().notNull(),
-    title: text(),
-    description: text().notNull(),
-    imageUrl: text('image_url'),
-    recipeId: uuid('recipe_id')
-      .notNull()
-      .references(() => recipes.id, { onDelete: 'cascade' }),
-  },
-  (table) => [
-    index('recipe_steps_recipe_idx').using(
       'btree',
       table.recipeId.asc().nullsLast(),
     ),
@@ -116,6 +97,7 @@ export const recipes = pgTable('recipes', {
     .notNull(),
   shortDescription: text('short_description'),
   slug: text().notNull(),
+  content: jsonb('content').$type<JSONContent>().notNull(),
 })
 
 export const sessions = pgTable('sessions', {

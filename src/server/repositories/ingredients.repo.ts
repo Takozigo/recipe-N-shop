@@ -19,10 +19,10 @@ export async function insertIngredients(
   ingredients: Array<{
     ingredient: string
     amount: number
-    ingredientId?: string | undefined
-    unit?: string | undefined
-    note?: string | undefined
-    section?: string | undefined
+    ingredientId?: string
+    unit: string
+    note?: string
+    section?: string
   }>,
 ) {
   const newIngredientsToInsert = ingredients
@@ -81,7 +81,7 @@ export async function updateRecipeIngredients(
     ingredient: string
     amount: number
     ingredientId?: string | undefined
-    unit?: string | undefined
+    unit: string
     note?: string | undefined
     section?: string | undefined
   }>,
