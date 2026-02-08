@@ -1,7 +1,8 @@
 import { XIcon } from 'lucide-react'
+import { Label } from './ui/label'
 import type { RecipeForm } from '@/hooks/use-recipe-form'
 import { TextAreaField, TextField } from '@/components/text-field'
-import { FieldGroup, FieldSeparator } from '@/components/ui/field'
+import { FieldGroup } from '@/components/ui/field'
 import { Combobox } from '@/components/ui/combobox'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -19,9 +20,13 @@ type RecipeInfoStepProps = {
 function RecipeInfoStep({ form, categories }: RecipeInfoStepProps) {
   return (
     <FieldGroup>
+      <Text variant="lead" className="text-center">
+        Recette
+      </Text>
       <form.Field name="categories" mode="array">
         {(field) => (
           <>
+            <Label>Categories :</Label>
             <Combobox
               data={categories.map((e) => ({ ...e, value: e.name }))}
               onSelect={(cat) =>
@@ -62,7 +67,6 @@ function RecipeInfoStep({ form, categories }: RecipeInfoStepProps) {
         label="Description"
         className="min-h-40"
       />
-      <FieldSeparator />
       <div className="flex items-center gap-4">
         <TextField
           name="servings"

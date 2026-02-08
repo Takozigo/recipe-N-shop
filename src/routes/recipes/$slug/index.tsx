@@ -48,7 +48,7 @@ function RouteComponent() {
           <SeeMore content={recipe.description} />
 
           <div
-            className="prose prose-neutral dark:prose-invert max-w-none"
+            className="prose prose-neutral dark:prose-invert max-w-non whitespace-pre-wrap"
             dangerouslySetInnerHTML={{ __html: html }}
           />
         </div>

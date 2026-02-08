@@ -32,6 +32,9 @@ export const ingredients = pgTable(
     id: uuid().defaultRandom().primaryKey(),
     value: text().notNull(),
     lang: text().notNull(),
+    price: numeric({ precision: 10, scale: 2 }),
+    quantity: numeric({ precision: 10, scale: 2 }),
+    unit: text(),
   },
   (table) => [
     unique('ingredients_value_lang_unique').on(table.value, table.lang),

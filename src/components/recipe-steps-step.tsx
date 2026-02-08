@@ -1,8 +1,9 @@
 import { Editor } from './tiptap/tiptap-editor/editor'
+import { Text } from './text'
 import type { Content, JSONContent } from '@tiptap/react'
 import type { RecipeForm } from '@/hooks/use-recipe-form'
 
-import { Field, FieldGroup } from '@/components/ui/field'
+import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 
 type RecipeStepsStepProps = {
   form: RecipeForm
@@ -13,6 +14,10 @@ const RecipeStepsStep = ({ form }: RecipeStepsStepProps) => {
 
   return (
     <FieldGroup>
+      <FieldSeparator />
+      <Text variant="lead" className="text-center">
+        Instructions
+      </Text>
       <form.Field name="content">
         {(field) => {
           const invalid =

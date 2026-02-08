@@ -23,16 +23,19 @@ export function ThemeProvider({ children, theme }: Props) {
     if (!theme) {
       const initialDarkMode =
         !!document.querySelector('meta[name="color-scheme"][content="dark"]') ||
-        window.matchMedia('(prefers-color-scheme: dark)').matches
+        (typeof window !== 'undefined' &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches)
       setTheme(initialDarkMode ? 'dark' : 'light')
     }
   }, [])
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleChange = () => setTheme(mediaQuery.matches ? 'dark' : 'light')
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
+    if (typeof window !== 'undefined') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+      const handleChange = () => setTheme(mediaQuery.matches ? 'dark' : 'light')
+      mediaQuery.addEventListener('change', handleChange)
+      return () => mediaQuery.removeEventListener('change', handleChange)
+    }
   }, [])
 
   return <ThemeContext value={{ theme, setTheme }}>{children}</ThemeContext>

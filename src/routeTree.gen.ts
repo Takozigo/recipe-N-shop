@@ -17,6 +17,7 @@ import { Route as CategoriesSlugIndexRouteImport } from './routes/categories/$sl
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminRegisterIndexRouteImport } from './routes/_authenticated/admin/register/index'
 import { Route as AuthenticatedAdminLoginIndexRouteImport } from './routes/_authenticated/admin/login/index'
+import { Route as AuthenticatedAdminIngredientsIndexRouteImport } from './routes/_authenticated/admin/ingredients/index'
 import { Route as AuthenticatedAdminRecipesNewIndexRouteImport } from './routes/_authenticated/admin/recipes/new/index'
 import { Route as AuthenticatedAdminRecipesIdEditIndexRouteImport } from './routes/_authenticated/admin/recipes/$id/edit/index'
 
@@ -61,6 +62,12 @@ const AuthenticatedAdminLoginIndexRoute =
     path: '/admin/login/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminIngredientsIndexRoute =
+  AuthenticatedAdminIngredientsIndexRouteImport.update({
+    id: '/admin/ingredients/',
+    path: '/admin/ingredients/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminRecipesNewIndexRoute =
   AuthenticatedAdminRecipesNewIndexRouteImport.update({
     id: '/admin/recipes/new/',
@@ -80,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/categories/$slug/': typeof CategoriesSlugIndexRoute
   '/recipes/$slug/': typeof RecipesSlugIndexRoute
+  '/admin/ingredients/': typeof AuthenticatedAdminIngredientsIndexRoute
   '/admin/login/': typeof AuthenticatedAdminLoginIndexRoute
   '/admin/register/': typeof AuthenticatedAdminRegisterIndexRoute
   '/admin/recipes/new/': typeof AuthenticatedAdminRecipesNewIndexRoute
@@ -91,6 +99,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/categories/$slug': typeof CategoriesSlugIndexRoute
   '/recipes/$slug': typeof RecipesSlugIndexRoute
+  '/admin/ingredients': typeof AuthenticatedAdminIngredientsIndexRoute
   '/admin/login': typeof AuthenticatedAdminLoginIndexRoute
   '/admin/register': typeof AuthenticatedAdminRegisterIndexRoute
   '/admin/recipes/new': typeof AuthenticatedAdminRecipesNewIndexRoute
@@ -104,6 +113,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/categories/$slug/': typeof CategoriesSlugIndexRoute
   '/recipes/$slug/': typeof RecipesSlugIndexRoute
+  '/_authenticated/admin/ingredients/': typeof AuthenticatedAdminIngredientsIndexRoute
   '/_authenticated/admin/login/': typeof AuthenticatedAdminLoginIndexRoute
   '/_authenticated/admin/register/': typeof AuthenticatedAdminRegisterIndexRoute
   '/_authenticated/admin/recipes/new/': typeof AuthenticatedAdminRecipesNewIndexRoute
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/categories/$slug/'
     | '/recipes/$slug/'
+    | '/admin/ingredients/'
     | '/admin/login/'
     | '/admin/register/'
     | '/admin/recipes/new/'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/categories/$slug'
     | '/recipes/$slug'
+    | '/admin/ingredients'
     | '/admin/login'
     | '/admin/register'
     | '/admin/recipes/new'
@@ -140,6 +152,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/'
     | '/categories/$slug/'
     | '/recipes/$slug/'
+    | '/_authenticated/admin/ingredients/'
     | '/_authenticated/admin/login/'
     | '/_authenticated/admin/register/'
     | '/_authenticated/admin/recipes/new/'
@@ -212,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminLoginIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/ingredients/': {
+      id: '/_authenticated/admin/ingredients/'
+      path: '/admin/ingredients'
+      fullPath: '/admin/ingredients/'
+      preLoaderRoute: typeof AuthenticatedAdminIngredientsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/recipes/new/': {
       id: '/_authenticated/admin/recipes/new/'
       path: '/admin/recipes/new'
@@ -231,6 +251,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminIngredientsIndexRoute: typeof AuthenticatedAdminIngredientsIndexRoute
   AuthenticatedAdminLoginIndexRoute: typeof AuthenticatedAdminLoginIndexRoute
   AuthenticatedAdminRegisterIndexRoute: typeof AuthenticatedAdminRegisterIndexRoute
   AuthenticatedAdminRecipesNewIndexRoute: typeof AuthenticatedAdminRecipesNewIndexRoute
@@ -239,6 +260,8 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminIngredientsIndexRoute:
+    AuthenticatedAdminIngredientsIndexRoute,
   AuthenticatedAdminLoginIndexRoute: AuthenticatedAdminLoginIndexRoute,
   AuthenticatedAdminRegisterIndexRoute: AuthenticatedAdminRegisterIndexRoute,
   AuthenticatedAdminRecipesNewIndexRoute:

@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useServerFn } from '@tanstack/react-start'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { logoutFn } from '@/server/actions/users/create-user'
 import { Text } from '@/components/text'
 import { Separator } from '@/components/ui/separator'
@@ -18,7 +18,15 @@ function RouteComponent() {
 
   return (
     <div className="container space-y-4">
-      <Text variant="h2">Hello "/admin/"!</Text>
+      <Text variant="h2">
+        Hello "/admin/"!{' '}
+        <Link
+          to={'/admin/ingredients'}
+          className={buttonVariants({ variant: 'link' })}
+        >
+          ingredients
+        </Link>
+      </Text>
       {recipes.map((e) => (
         <Item key={e.id} variant="muted">
           <ItemContent>{e.title}</ItemContent>

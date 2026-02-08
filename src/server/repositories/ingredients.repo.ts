@@ -3,6 +3,7 @@ import { eq } from 'drizzle-orm'
 import { db } from '../db'
 import type { DbClient } from '../db'
 import {
+  ingredients,
   ingredients as ingredientsSchema,
   recipeIngredients,
 } from '@/server/db/schema'
@@ -77,7 +78,7 @@ export async function insertIngredients(
 export async function updateRecipeIngredients(
   tx: DbClient,
   recipeId: string,
-  ingredients: Array<{
+  ingredientList: Array<{
     ingredient: string
     amount: number
     ingredientId?: string | undefined
@@ -86,7 +87,7 @@ export async function updateRecipeIngredients(
     section?: string | undefined
   }>,
 ) {
-  const newIngredientsToInsert = ingredients
+  const newIngredientsToInsert = ingredientList
     .filter((i) => i.ingredientId === undefined)
     .map((e) => ({
       value: e.ingredient,
@@ -106,7 +107,7 @@ export async function updateRecipeIngredients(
 
   const recipeIngredientsToInsert: Array<
     typeof recipeIngredients.$inferInsert
-  > = ingredients.map((e) => {
+  > = ingredientList.map((e) => {
     const amount = String(e.amount)
     if (e.ingredientId)
       return {
@@ -134,4 +135,36 @@ export async function updateRecipeIngredients(
     .delete(recipeIngredients)
     .where(eq(recipeIngredients.recipeId, recipeId))
   await tx.insert(recipeIngredients).values(recipeIngredientsToInsert)
+}
+
+export async function updateIngredients(ingredient: {
+  id: string
+  value: string
+  lang: string
+  price: number | null
+  quantity: number | null
+  unit: string | null
+}) {
+  const { value, id, price, lang, quantity, unit } = ingredient
+  console.log({ value, id, price, lang, quantity, unit })
+  const result = await db
+    .update(ingredients)
+    .set({
+      value,
+      lang,
+      price: String(price),
+      quantity: String(quantity),
+      unit,
+    })
+    .where(eq(ingredients.id, id))
+  console.log({ result })
+}
+
+export async function deleteIngredient(id: string) {
+  const rest = await db
+    .select()
+    .from(recipeIngredients)
+    .where(eq(ingredients.id, id))
+  if (rest.length > 0) return { error: 'cannot delete' }
+  await db.delete(ingredients).where(eq(ingredients.id, id))
 }

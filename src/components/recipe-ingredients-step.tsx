@@ -1,12 +1,14 @@
-import { TrashIcon } from 'lucide-react'
+import { TrashIcon, XIcon } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Input } from './ui/input'
+import { Text } from './text'
+import { Badge } from './ui/badge'
 import type { RecipeForm } from '@/hooks/use-recipe-form'
 import type { UnitKey } from '@/lib/constants/unit'
 import { FieldTextInput } from '@/components/text-field'
 import { Button } from '@/components/ui/button'
 import { Combobox } from '@/components/ui/combobox'
-import { FieldGroup } from '@/components/ui/field'
+import { FieldGroup, FieldSeparator } from '@/components/ui/field'
 import {
   Table,
   TableBody,
@@ -53,8 +55,7 @@ function RecipeIngredientsStep({
   form,
   ingredients,
 }: RecipeIngredientsStepProps) {
-  const { sections, addSection, setSections, reset } = useSectionStore()
-  const sectionRef = useRef<HTMLInputElement>(null)
+  const { sections, setSections, reset } = useSectionStore()
   const [pendingIngredient, setPendingIngredient] = useState<{
     dataId?: string
     value: string
@@ -74,34 +75,13 @@ function RecipeIngredientsStep({
   }, [form, setSections, reset])
 
   return (
-    <>
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button className="mb-4">Create Section (Optional)</Button>
-        </AlertDialogTrigger>
+    <FieldGroup>
+      <FieldSeparator />
+      <Text variant="lead" className="text-center">
+        Liste des ingredients
+      </Text>
+      <SectionContainer />
 
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Add a section to your recipe</AlertDialogTitle>
-            <AlertDialogDescription>
-              This is optional, it could be "sauce", "dough", "side" or anything
-              else.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <Input ref={sectionRef} />
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                if (sectionRef.current?.value)
-                  addSection(sectionRef.current.value)
-              }}
-            >
-              Add
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
       <FieldGroup>
         <form.Field name="ingredients" mode="array">
           {(field) => (
@@ -253,8 +233,57 @@ function RecipeIngredientsStep({
           )}
         </form.Field>
       </FieldGroup>
-    </>
+    </FieldGroup>
   )
 }
 
 export default RecipeIngredientsStep
+
+const SectionContainer = () => {
+  const sectionRef = useRef<HTMLInputElement>(null)
+  const { addSection, sections, removeSection } = useSectionStore()
+
+  return (
+    <AlertDialog>
+      <div className="flex items-center gap-4">
+        {sections.map((e) => (
+          <Badge variant="outline" className="pl-4 text-lg">
+            {e}
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => removeSection(e)}
+            >
+              <XIcon className="text-red-500" />
+            </Button>
+          </Badge>
+        ))}
+        <AlertDialogTrigger asChild>
+          <Button>Create Section (Optional)</Button>
+        </AlertDialogTrigger>
+      </div>
+
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Add a section to your recipe</AlertDialogTitle>
+          <AlertDialogDescription>
+            This is optional, it could be "sauce", "dough", "side" or anything
+            else.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <Input ref={sectionRef} />
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={() => {
+              if (sectionRef.current?.value)
+                addSection(sectionRef.current.value)
+            }}
+          >
+            Add
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}

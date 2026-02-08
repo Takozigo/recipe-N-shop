@@ -84,13 +84,11 @@ export async function updateRecipeDb(
 }
 
 export async function getRecipes(options: Options = {}) {
-  const { limit, orderBy } = options
+  const { limit, orderBy = 'desc' } = options
   const query = db.query.recipes.findMany({
     columns: { title: true, id: true, slug: true },
     orderBy: { createdAt: orderBy },
     limit,
-    // ...(limit !== undefined ? { limit } : {}),
-    // ...(where !== undefined ? { where } : {}),
   })
 
   return await query
@@ -109,7 +107,6 @@ export async function getRecipesByCategory(
 
   const query = db.query.recipes.findMany({
     columns: { title: true, id: true, slug: true },
-    // with: { categories: { where: eq(recipeCategories.categoryId, cat.id) } },
     orderBy: { createdAt: orderBy },
     ...(limit !== undefined ? { limit } : {}),
     where: {

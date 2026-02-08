@@ -275,7 +275,7 @@ export function Editor({ content, onChange }: Editor) {
         <EditorContent
           editor={editor}
           role="presentation"
-          className="simple-editor-content"
+          className="simple-editor-content min-h-56"
         />
       </EditorContext.Provider>
     </div>
